@@ -63,7 +63,7 @@ random_forest_SR <- function(station)
     name <- as.character(station)
     
     #Read table
-    station <- read.table(station, header = TRUE)
+    station <- read.table(paste0("./Randomforest/",station), header = TRUE)
     
     #Real Data
     
