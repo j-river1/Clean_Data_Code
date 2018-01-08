@@ -166,21 +166,7 @@ Hour_to_Day <- function(weather_data, percentage)
     
     colnames(hours_day) <- c("Date","Value")
     
-    #Comprobar si el el directorio existe
-    #if(!dir.exists(paste(getwd(), "Daily_Data", sep = "/")))
-    #{
-     #   new_directory <- paste(getwd(), "Daily_Data", sep = "/" )
-     #   dir.create(file.path(new_directory))
-     #   setwd(new_directory)
-        
-    #}
-    #else
-    #{
-     #   new_directory <- paste(getwd(), "Daily_Data", sep = "/" )
-     #  setwd(new_directory)
-    #}
-    
-    
+
     name <- as.character(weather_data)
     weather_data <- paste0("..", "/", "AfterDailyControl_Data", "/", name )            
     write.table (hours_day, file = weather_data, row.names= FALSE, sep = "\t", col.names = TRUE)
