@@ -380,7 +380,7 @@ check_amount_NA <- function(file, porcentage)
   porcentage <- 1 - porcentage
   
   #Read table 
-  table <- read.table(paste0("./AfterDailyControl_Data/", file), header = TRUE)
+  table <- read.table(paste0("./Original_Data/", file), header = TRUE)
   
   #Count the NA
   number_NA <- sum(is.na(table$Value))
@@ -388,7 +388,7 @@ check_amount_NA <- function(file, porcentage)
   
   if(number_NA/number_length > porcentage)
   {
-    result <- split_name(file)[1]
+    result <- data.frame(split_name(file)[1], split_name(file)[2])
     
   }
   
@@ -412,11 +412,11 @@ Check_All_Station_NA  <- function (listfiles, porcentage)
   
   result <- lapply(listfiles, check_amount_NA, porcentage = porcentage)
   result <- result[!sapply(result, is.null)]
-  result <- unique(result)
-  names_stations <- unlist(result)
+  final_results <- do.call("rbind", result)  
+  colnames(final_results) <- c("Station_Name", "Variable_Name")
   
-  write.table(names_stations, "./Results/Stations_Delete.txt")
-  return (names_stations)
+  write.table(final_results, "./Results/Stations_Delete.txt", row.names = FALSE)
+  return (final_results)
 }
 
 #Choose_stations_Daily chooses station with meets the condition NA
@@ -429,5 +429,48 @@ Choose_station_Daily <- function(file, names_station)
   }
     
 }
+
+#few_NA choose stations with few NA and it could use moving average
+#Arguments          -file
+#Percentaje         -percentage minimun
+few_NA <- function (file, percentage)
+{
+  #Read table 
+  table <- read.table(paste0("./Original_Data/", file), header = TRUE)
   
+  
+  #Count the NA
+  number_NA <- sum(is.na(table$Value))
+  number_length <- length(table$Value)
+  
+  if(number_NA/number_length < percentage)
+  {
+    result <- data.frame(split_name(file)[1], split_name(file)[2])
+    
+  }
+  
+  else
+  {
+    result <- NULL
+  }  
+  
+  return (result)
+
+}
+
+
+Check_All_Station_Few_NA  <- function (listfiles, percentage)
+{
+  
+  
+  result <- lapply(listfiles, few_NA, percentage = percentage)
+  result <- result[!sapply(result, is.null)]
+  final_results <- do.call("rbind", result)  
+  colnames(final_results) <- c("Station_Name", "Variable_Name")
+  
+  
+  
+  write.table(final_results, "./Results/Stations_Few_NA.txt")
+  return (final_results)
+}
 
