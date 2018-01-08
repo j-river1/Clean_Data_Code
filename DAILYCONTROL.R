@@ -375,23 +375,24 @@ daily_control <- function (daily_restric, file, typefile, sepa )
 #Arguments    - File with data daily
 
 
-check_amount_NA <- function(file)
+check_amount_NA <- function(file, porcentage)
 {
   #Read table 
-  tabla <- read.table(paste0("./AfterDailyControl_Data/", file), header = TRUE)
+  table <- read.table(paste0("./AfterDailyControl_Data/", file), header = TRUE)
   
   #Count the NA
   number_NA <- sum(is.na(table$Value))
   number_length <- length(table$Value)
   
-  if(number_NA/number_length > 0.2)
+  if(number_NA/number_length > porcentage)
   {
-    result <- file
+    result <- split_name(file)[1]
+    
   }
   
   else
   {
-    result <- NA
+    result <- NULL
   }  
   
   return (result)
@@ -399,3 +400,18 @@ check_amount_NA <- function(file)
 }
 
 
+#Check_All_Station_NA works for checking ability all stations
+#Arguments     - List of all stations 
+#Porcentage    - porcentage amount of NA
+
+Check_All_Station_NA  <- function (listfiles, porcentage)
+{
+  
+  
+  result <- lapply(listfiles, check_amount_NA, porcentage = porcentage)
+  result <- resultado[!sapply(resultado, is.null)]
+  result <- unique(resultado)
+  
+  
+  return (result)
+}
