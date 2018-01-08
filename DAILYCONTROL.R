@@ -409,7 +409,7 @@ Check_All_Station_NA  <- function (listfiles, porcentage)
   
   
   result <- lapply(listfiles, check_amount_NA, porcentage = porcentage)
-  result <- resultado[!sapply(resultado, is.null)]
+  result <- result[!sapply(result, is.null)]
   result <- unique(resultado)
   
   
