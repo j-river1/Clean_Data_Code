@@ -416,10 +416,18 @@ Check_All_Station_NA  <- function (listfiles, porcentage)
   names_stations <- unlist(result)
   
   write.table(names_stations, "./Results/Stations_Delete.txt")
-  return (result)
+  return (names_stations)
 }
 
+#Choose_stations_Daily chooses station with meets the condition NA
 
-
-
+Choose_station_Daily <- function(file, names_station)
+{
+  if(!any(split_name(file)[1] %in% names_station ))
+  {
+    file.copy(from=file, to ="../Results")
+  }
+    
+}
+  
 
