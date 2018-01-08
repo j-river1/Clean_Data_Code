@@ -138,7 +138,7 @@ if(TimeData == 2)
   
   #Daily Control NA
   names_stations_NA <- Check_All_Station_NA(list.files(path = "./Original_Data"), Percentage)
-  
+  names_stations_few_NA <- Check_All_Station_Few_NA (list.files(path = "./Original_Data"), 0.06)
   
   setwd("./Original_Data")
   Choose_station_Daily (list.files(), names_stations_NA)
@@ -156,20 +156,11 @@ if(TimeData == 2)
   write.csv(final_results, file = paste0("./Results/","Results_DailyControl.csv") )
   
   
-  #Daily Control NA
-  
-  
 }
 
 #Change Directory to After Daily Data
 #setwd("./AfterDailyControl_Data")
 
-
-# #File with format for using  Rmwagen
-# put_rmawgenformat(list.files(), 'TX', Start_date, End_date)
-# put_rmawgenformat(list.files(), 'TM', Start_date, End_date)
-# put_rmawgenformat(list.files(), 'P', Start_date, End_date)
-#put_rmawgenformat <- function(files, vari, Start_date, End_date, sepa)
 
 #File with format for using  Rmwagen
 put_rmawgenformat(list.files("./AfterDailyControl_Data"), 'TX', Start_date, End_date, sepa =separt)
@@ -188,9 +179,11 @@ graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv"
 
 
 #Moving and merge files
-setwd("./Files_By_Station")
+setwd("./Rmawgen/Files_By_Station")
+#Moving ALL files and Files_By_Station
 move_files_SR_HR()
-match_files(list.files("./Files_By_Station"), "../../Results/Results_DailyControl.csv")
+
+match_files(list.files(), "../../Results/Results_DailyControl.csv")
 
 #Using Random forest 
 setwd("../../Randomforest/")
