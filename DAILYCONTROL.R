@@ -369,7 +369,6 @@ daily_control <- function (daily_restric, file, typefile, sepa )
   
 }
 
-"./AfterDailyControl_Data"
 
 #check_amount_NA works counting number of NA per day if data is daily.
 #Arguments    - File with data daily
@@ -410,7 +409,7 @@ Check_All_Station_NA  <- function (listfiles, porcentage)
   
   result <- lapply(listfiles, check_amount_NA, porcentage = porcentage)
   result <- result[!sapply(result, is.null)]
-  result <- unique(resultado)
+  result <- unique(result)
   
   
   return (result)
