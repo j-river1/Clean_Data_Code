@@ -141,13 +141,15 @@ if(TimeData == 2)
 
   #Daily Control
   lapply(list.files(path= "./AfterDailyControl_Data"), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt)
-  
-  
-  
   results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, typefile = 1, sepa= separt, time =2)
   final_results <- do.call("rbind", results)    
   colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data")
   write.csv(final_results, file = paste0("./Results/","Results_DailyControl.csv") )
+  
+  
+  #Daily Control NA
+  Check_All_Station_NA(list.files(path = "./AfterDailyControl_Data"), Percentage)
+  
   
 }
 
@@ -172,9 +174,9 @@ put_rmawgenformat(list.files("./AfterDailyControl_Data"), 'P', Start_date, End_d
 
 #Using Rmwagen 
 #setwd("./Rmawgen")
-graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_Máxima', manual = 2, choose_station = rep(1:15))
-graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MIN", 'Temperatura_Mínima', manual = 2, choose_station = rep(11:15))
-graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "PRECIPITATION", "Precipitación", manual = 2, choose_station = rep(11:15))
+graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_M?xima', manual = 2, choose_station = rep(1:15))
+graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MIN", 'Temperatura_M?nima', manual = 2, choose_station = rep(11:15))
+graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "PRECIPITATION", "Precipitaci?n", manual = 2, choose_station = rep(11:15))
 
 
 #Moving and merge files
