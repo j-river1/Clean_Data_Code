@@ -117,7 +117,7 @@ random_forest_RH <- function(station)
     
     
     #Read table
-    station <- read.table(station, header = TRUE)
+    station <- read.table(paste0("./Randomforest/",station), header = TRUE)
     
     #Real Data
     real_data <- station 
@@ -164,7 +164,7 @@ random_forest_RH <- function(station)
 
 graph_all_SR_RH <- function (listFiles, variable)
 {
-    if(variable == "Radiaci?n_Solar")
+    if(variable == "Radiación_Solar")
     {
         Data_Complete <- lapply(listFiles, random_forest_SR)
         
