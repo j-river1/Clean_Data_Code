@@ -369,6 +369,7 @@ daily_control <- function (daily_restric, file, typefile, sepa )
   
 }
 
+"./AfterDailyControl_Data"
 
 #check_amount_NA works counting number of NA per day if data is daily.
 #Arguments    - File with data daily
@@ -377,7 +378,7 @@ daily_control <- function (daily_restric, file, typefile, sepa )
 check_amount_NA <- function(file)
 {
   #Read table 
-  tabla <- read.table(file, header = TRUE)
+  tabla <- read.table(paste0("./AfterDailyControl_Data/", file), header = TRUE)
   
   #Count the NA
   number_NA <- sum(is.na(table$Value))
