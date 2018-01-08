@@ -166,12 +166,11 @@ Hour_to_Day <- function(weather_data, percentage)
     
     colnames(hours_day) <- c("Date","Value")
     
-
+    
+    
     name <- as.character(weather_data)
     weather_data <- paste0("..", "/", "AfterDailyControl_Data", "/", name )            
     write.table (hours_day, file = weather_data, row.names= FALSE, sep = "\t", col.names = TRUE)
-    #setwd('..')
-    #return(hours_day)
     
 }
 
@@ -369,3 +368,33 @@ daily_control <- function (daily_restric, file, typefile, sepa )
   return(read_file)
   
 }
+
+
+#check_amount_NA works counting number of NA per day if data is daily.
+#Arguments    - File with data daily
+
+
+check_amount_NA <- function(file)
+{
+  #Read table 
+  tabla <- read.table(file, header = TRUE)
+  
+  #Count the NA
+  number_NA <- sum(is.na(table$Value))
+  number_length <- length(table$Value)
+  
+  if(number_NA/number_length > 0.2)
+  {
+    result <- file
+  }
+  
+  else
+  {
+    result <- NA
+  }  
+  
+  return (result)
+  
+}
+
+
