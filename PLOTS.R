@@ -13,18 +13,18 @@ graph_station <- function (Station_table, variable)
     name <- unique(Station_table$Station_Names)
     
     #Units
-    if(variable == 'Temperatura_Máxima' || variable == 'Temperatura_Mínima')
+    if(variable == 'Temperatura_MÃ¡xima' || variable == 'Temperatura_MÃ­nima')
     {
         y = "Grados_Centigrados"
     }
     
-    if(variable == 'Precipitación')
+    if(variable == 'PrecipitaciÃ³n')
     {
         
         y = "Mililitros"
     }
     
-    if(variable == 'Radiación_Solar')
+    if(variable == 'Radiacion_Solar')
     {
         y = "Calorias_cm2_diarios"
     }
@@ -60,32 +60,26 @@ graph_station <- function (Station_table, variable)
     ggsave(nameFile, plot=graph)
     
     
-    if(variable == 'Temperatura_Máxima' )
+    if(variable == 'Temperatura_MÃ¡xima' )
     {
         
         namefile = "TX"
     }
     
-    if(variable == 'Temperatura_Mínima' )
+    if(variable == 'Temperatura_MÃ­nima' )
     {
         
         namefile = "TM"
     }
     
     
-    if(variable == 'Temperatura_Mínima' )
-    {
-        
-        namefile = "TM"
-    }
-    
-    if(variable == 'Precipitación')
+    if(variable == 'PrecipitaciÃ³n')
     {
         
         namefile = "P"
     }
     
-    if(variable == 'Radiación_Solar')
+    if(variable == 'RadiaciÃ³n_Solar')
     {
         namefile = "SR"
     }
@@ -100,13 +94,15 @@ graph_station <- function (Station_table, variable)
     if(namefile == "SR" )
     {
         name_file <- paste0(paste(name,namefile, sep="_"),".txt")
-        weather_data <- paste0(".", "/", "SR", "/", name_file )   
+        #weather_data <- paste0(".", "/", "SR", "/", name_file )
+        weather_data <- paste0(".", "/Rmawgen/", "Files_By_Station", "/", name_file ) 
         
     }
     else if (namefile == "RH")
     {
         name_file <- paste0(paste(name,namefile, sep="_"),".txt")
-        weather_data <- paste0(".", "/", "RH", "/", name_file )   
+        #weather_data <- paste0(".", "/", "RH", "/", name_file ) 
+        weather_data <- paste0(".", "/Rmawgen/", "Files_By_Station", "/", name_file ) 
         
     } 
     else
