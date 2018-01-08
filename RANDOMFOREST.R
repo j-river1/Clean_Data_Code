@@ -3,12 +3,12 @@
 #
 library(randomForest)
 
-subDir <- "Final_Files_HR"
-subDir <- "With_SR"
-subDir <- "Total_Final"
+#subDir <- "Final_Files_HR"
+#subDir <- "With_SR"
+#subDir <- "Total_Final"
 
 
-dir.create(file.path(getwd(), subDir), showWarnings = FALSE)
+#dir.create(file.path(getwd(), subDir), showWarnings = FALSE)
 #joinfiles join all files.
 
 join_file <- function (name)
@@ -54,7 +54,7 @@ join_file <- function (name)
 
 #All files join all files. 
 
-lapply (names_estaciones, join_file)
+#lapply (names_estaciones, join_file)
 
 #radom_forest fill missing values for missing values
 random_forest_SR <- function(station)
@@ -106,8 +106,8 @@ random_forest_SR <- function(station)
     
 }
 
-lapply(list.files(), random_forest_SR)
-setwd("C:/Users/JCRIVERA/Documents/Codigo_Nuevo_Clima/Datos/Datos_Prueba/Hourly_Data/Daily_Data/Random_Forest/Final_Files/With_SR")
+#lapply(list.files(), random_forest_SR)
+#setwd("C:/Users/JCRIVERA/Documents/Codigo_Nuevo_Clima/Datos/Datos_Prueba/Hourly_Data/Daily_Data/Random_Forest/Final_Files/With_SR")
 
 #radom_forest fill missing values for missing values
 random_forest_RH <- function(station)
@@ -157,14 +157,14 @@ random_forest_RH <- function(station)
     
 }
 
-lapply(list.files(pattern ="\\.txt$"), random_forest_RH)
+#lapply(list.files(pattern ="\\.txt$"), random_forest_RH)
 
 
 #graph_all_SR_HR graphs all stations.
 
 graph_all_SR_RH <- function (listFiles, variable)
 {
-    if(variable == "Radiación_Solar")
+    if(variable == "Radiaci?n_Solar")
     {
         Data_Complete <- lapply(listFiles, random_forest_SR)
         
