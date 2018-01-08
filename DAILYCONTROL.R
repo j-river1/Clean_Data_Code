@@ -376,6 +376,9 @@ daily_control <- function (daily_restric, file, typefile, sepa )
 
 check_amount_NA <- function(file, porcentage)
 {
+  #porcentage NA
+  porcentage <- 1 - porcentage
+  
   #Read table 
   table <- read.table(paste0("./AfterDailyControl_Data/", file), header = TRUE)
   
@@ -410,7 +413,13 @@ Check_All_Station_NA  <- function (listfiles, porcentage)
   result <- lapply(listfiles, check_amount_NA, porcentage = porcentage)
   result <- result[!sapply(result, is.null)]
   result <- unique(result)
+  names_stations <- unlist(result)
   
-  
+  write.table(names_stations, "./Results/Stations_Delete.txt")
   return (result)
 }
+
+
+
+
+
