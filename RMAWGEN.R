@@ -182,8 +182,10 @@ applying_rmwagen_ALL <- function (info_station, TEMPERATURE_MAX, TEMPERATURE_MIN
 {
   #Read Station 
   stations <- read.csv("./Results/Results_DailyControl.csv", header=TRUE)
-  stations$Station_Name <- unique(stations$Station_Name)
+  stations <- subset(stations, Variable_Name=="P")
   stations <- stations[choose_station,]
+  
+  
   
   #Arguments for rmwagen
   station <- as.vector(stations$Station_Name)
