@@ -4,20 +4,20 @@
 #Arguments      -listFiles list of files
 
 
-match_files  <- function(listFiles, resumefile)
+match_files  <- function(listFiles, resumefile, type)
 {
  
   filenames <- read.csv(resumefile, header=T)
   names_stations <- unique(filenames$Station_Name)
     
   #Grouping according names station
-  files  <- lapply(names_stations, merge_files, listfiles = list.files())
+  files  <- lapply(names_stations, merge_files, listfiles = list.files(), type = type)
 
   return (files)
 }
 
 #merge_files merges files according to names
-merge_files <- function (name, listfiles)
+merge_files <- function (name, listfiles, type)
 {
   name <- as.character(name)
   
@@ -27,7 +27,15 @@ merge_files <- function (name, listfiles)
   
   namec <- paste0(name,".txt" )
   #write.table(tablaPerday, file = paste(getwd(),"Random_Forest", namec, sep =  "/"), row.names = FALSE, quote = FALSE, col.names = TRUE)
-  write.table(tablaPerday, file = paste("../../RandomForest", namec, sep =  "/"), row.names = FALSE, quote = FALSE, col.names = TRUE)
+  if(type == 1)
+  {
+    write.table(tablaPerday, file = paste("../../RandomForest", namec, sep =  "/"), row.names = FALSE, quote = FALSE, col.names = TRUE)
+  }
+  if(type == 2)
+  {
+    write.table(tablaPerday, file = paste("../../Final_Data", namec, sep =  "/"), row.names = FALSE, quote = FALSE, col.names = TRUE)
+  }
+  
   return(tablaPerday)
 }
 
