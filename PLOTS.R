@@ -24,7 +24,7 @@ graph_station <- function (Station_table, variable)
         y = "Mililitros"
     }
     
-    if(variable == 'Radiacion_Solar')
+    if(variable == 'Radiación_Solar')
     {
         y = "Calorias_cm2_diarios"
     }
@@ -94,16 +94,14 @@ graph_station <- function (Station_table, variable)
     if(namefile == "SR" )
     {
         name_file <- paste0(paste(name,namefile, sep="_"),".txt")
-        #weather_data <- paste0(".", "/", "SR", "/", name_file )
-        weather_data <- paste0(".", "/Rmawgen/", "Files_By_Station", "/", name_file ) 
-        
+        #weather_data <- paste0(".", "/", "SR", "/", name_file )   
+        weather_data <- paste0(".", "/Rmawgen/", "Files_By_Station", "/", name_file )
     }
     else if (namefile == "RH")
     {
         name_file <- paste0(paste(name,namefile, sep="_"),".txt")
-        #weather_data <- paste0(".", "/", "RH", "/", name_file ) 
-        weather_data <- paste0(".", "/Rmawgen/", "Files_By_Station", "/", name_file ) 
-        
+        #weather_data <- paste0(".", "/", "RH", "/", name_file )   
+        weather_data <- paste0(".", "/Rmawgen/", "Files_By_Station", "/", name_file )
     } 
     else
     {
@@ -124,6 +122,9 @@ graph_station <- function (Station_table, variable)
 #             -variable_rmw. variable for using in rmwagen
 #             -variable_plot. variable for plot
 #Return graphs
+
+
+#graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_M?xima', manual = 2, choose_station = c(24,7))
 
 graph_all <- function(listFiles, resumefile, variable_rmw, variable_plot, manual, choose_station)
 {
