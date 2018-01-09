@@ -182,7 +182,7 @@ graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv"
 setwd("./Rmawgen/Files_By_Station")
 #Moving ALL files and Files_By_Station
 move_files_SR_HR()
-match_files(list.files(), "../../Results/Results_DailyControl.csv")
+match_files(list.files(), "../../Results/Results_DailyControl.csv", type=1)
 setwd("..")
 setwd("..")
 
@@ -191,8 +191,9 @@ setwd("..")
 graph_all_SR_RH(list.files(path = "./Randomforest/", pattern = "\\.txt$"), "Humedad_Relativa")
 graph_all_SR_RH(list.files(path = "./Randomforest/", pattern = "\\.txt$"), "Radiación_Solar")
 
-
-
+#Change final file to folder 
+setwd("./Rmawgen/Files_By_Station")
+match_files(list.files(), "../../Results/Results_DailyControl.csv", type=2)
 
 #Moving final data
 read_files(list.files(pattern=".txt"))
