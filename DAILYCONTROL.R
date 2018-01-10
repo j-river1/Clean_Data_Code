@@ -167,10 +167,11 @@ Hour_to_Day <- function(weather_data, percentage)
     colnames(hours_day) <- c("Date","Value")
     
     
-    
     name <- as.character(weather_data)
     weather_data <- paste0("..", "/", "AfterDailyControl_Data", "/", name )            
     write.table (hours_day, file = weather_data, row.names= FALSE, sep = "\t", col.names = TRUE)
+    #setwd('..')
+    #return(hours_day)
     
 }
 
@@ -369,7 +370,6 @@ daily_control <- function (daily_restric, file, typefile, sepa )
   
 }
 
-
 #check_amount_NA works counting number of NA per day if data is daily.
 #Arguments    - File with data daily
 
@@ -419,15 +419,16 @@ Check_All_Station_NA  <- function (listfiles, porcentage)
   return (final_results)
 }
 
+
 #Choose_stations_Daily chooses station with meets the condition NA
 
 Choose_station_Daily <- function(file, names_station)
 {
   if(!any(split_name(file)[1] %in% names_station ))
   {
-    file.copy(from=file, to ="../Results")
+    file.copy(from=file, to ="../AfterDailyControl_Data")
   }
-    
+  
 }
 
 #few_NA choose stations with few NA and it could use moving average
@@ -455,7 +456,7 @@ few_NA <- function (file, percentage)
   }  
   
   return (result)
-
+  
 }
 
 
@@ -473,4 +474,5 @@ Check_All_Station_Few_NA  <- function (listfiles, percentage)
   write.table(final_results, "./Results/Stations_Few_NA.txt")
   return (final_results)
 }
+
 
