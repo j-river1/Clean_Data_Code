@@ -6,8 +6,9 @@
 read_files <- function (files, variable, Start_date, End_date, sepa)
 {
     #Check name file
+    vari <- variable
     
-    if(split_name(files)[2] == variable)
+    if(split_name(files)[2] == vari)
     {
         #Read file
         namefile <- paste0(getwd(), "/AfterDailyControl_Data/", files)
