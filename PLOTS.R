@@ -6,7 +6,7 @@
 graph_station <- function (Station_table, variable)
 {
     
-    #Parameters
+ #   #Parameters
     real_data <- Station_table$Real_Data
     estimated_data <- Station_table$Estimated_Data
     dates <- Station_table$Date
