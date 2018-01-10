@@ -135,43 +135,32 @@ write.csv(final_results, file = paste0("../Results/","Results_DailyControl.csv")
 
 if(TimeData == 2)
 {
-  #setwd("./Original_Data")
-  #file.copy(from=list.files(), to ="../AfterDailyControl_Data")
-  #setwd("..")
-
   
   #Daily Control NA
   names_stations_NA <- Check_All_Station_NA(list.files(path = "./Original_Data"), Percentage)
-  
+  names_stations_few_NA <- Check_All_Station_Few_NA (list.files(path = "./Original_Data"), 0.06)
   
   setwd("./Original_Data")
   Choose_station_Daily (list.files(), names_stations_NA)
   setwd("..")
   
-  
-  
-  
+  #setwd("./Original_Data")
+  #file.copy(from=list.files(), to ="../AfterDailyControl_Data")
+  #setwd("..")
+
   #Daily Control
   lapply(list.files(path= "./AfterDailyControl_Data"), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt)
-  
-  
-  
   results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, typefile = 1, sepa= separt, time =2)
   final_results <- do.call("rbind", results)    
   colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data")
   write.csv(final_results, file = paste0("./Results/","Results_DailyControl.csv") )
+  
   
 }
 
 #Change Directory to After Daily Data
 #setwd("./AfterDailyControl_Data")
 
-
-# #File with format for using  Rmwagen
-# put_rmawgenformat(list.files(), 'TX', Start_date, End_date)
-# put_rmawgenformat(list.files(), 'TM', Start_date, End_date)
-# put_rmawgenformat(list.files(), 'P', Start_date, End_date)
-#put_rmawgenformat <- function(files, vari, Start_date, End_date, sepa)
 
 #File with format for using  Rmwagen
 put_rmawgenformat(list.files("./AfterDailyControl_Data"), 'TX', Start_date, End_date, sepa =separt)
@@ -184,20 +173,28 @@ put_rmawgenformat(list.files("./AfterDailyControl_Data"), 'P', Start_date, End_d
 
 #Using Rmwagen 
 #setwd("./Rmawgen")
-graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_Máxima', manual = 2, choose_station = c(24,7))
-graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MIN", 'Temperatura_Mínima', manual = 2, choose_station = c(24, 7))
-graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "PRECIPITATION", "Precipitación", manual = 2, choose_station = c(24, 7))
+station <- c(13, 14)
+graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_MÃ¡xima', manual = 2, choose_station = station)
+graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MIN", 'Temperatura_MÃ­nima', manual = 2, choose_station = station)
+graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "PRECIPITATION", "PrecipitaciÃ³n", manual = 2, choose_station = station)
 
 
 #Moving and merge files
-setwd("./Files_By_Station")
+setwd("./Rmawgen/Files_By_Station")
+#Moving ALL files and Files_By_Station
 move_files_SR_HR()
-match_files(list.files("./Files_By_Station"), "../../Results/Results_DailyControl.csv")
+match_files(list.files(), "../../Results/Results_DailyControl.csv", type=1)
+setwd("..")
+setwd("..")
 
 #Using Random forest 
-setwd("../../Randomforest/")
-graph_all_SR_RH(list.files(pattern = "\\.txt$"), "Humedad_Relativa")
-graph_all_SR_RH(list.files(pattern = "\\.txt$"), "Radiaci?n_Solar")
+#setwd("../../Randomforest/")
+graph_all_SR_RH(list.files(path = "./Randomforest/", pattern = "\\.txt$"), "Humedad_Relativa")
+graph_all_SR_RH(list.files(path = "./Randomforest/", pattern = "\\.txt$"), "RadiaciÃ³n_Solar")
+
+#Change final file to folder 
+setwd("./Rmawgen/Files_By_Station")
+match_files(list.files(), "../../Results/Results_DailyControl.csv", type=2)
 
 #Moving final data
 read_files(list.files(pattern=".txt"))
