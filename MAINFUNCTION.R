@@ -83,19 +83,19 @@ Percentage <- 0.8
 #Daily Restrictions as data frame
 Variables <- c("Vmin", "Vmax")
 TX <- c(48,0)
-TM <- c(48,0)
+TM <- c(48,-10)
 SR <- c(1600,0)
 RH <- c(100,0)
 Daily_restric <- data.frame(TX, TM, SR,RH)
 
 #Variables 
-Start_date <- c("2006-1-1")
+Start_date <- c("2000-1-1")
 End_date <- c("2017-12-31")
 
 
 #Separtor between columns
 
-separt <- " "
+separt <- ""
 
 
 
