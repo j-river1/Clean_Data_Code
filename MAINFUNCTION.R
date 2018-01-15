@@ -67,6 +67,7 @@ TimeData <- 2
 Variables <- c("Vmin", "Vmax")
 TX <- c(41,0)
 TM <- c(41,0)
+#Watts per meter 
 SR <- c(1600,0)
 RH <- c(100,0)
 LONG <- c(-110.119, NA)
@@ -84,7 +85,8 @@ Percentage <- 0.8
 Variables <- c("Vmin", "Vmax")
 TX <- c(48,0)
 TM <- c(48,-10)
-SR <- c(1600,0)
+#Calories per centimeter
+SR <- c(1033,0)
 RH <- c(100,0)
 Daily_restric <- data.frame(TX, TM, SR,RH)
 
