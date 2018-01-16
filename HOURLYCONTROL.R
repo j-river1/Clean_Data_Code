@@ -61,7 +61,7 @@ put_format<- function(originalfile, date_format="%Y%m%d", typefile, sepa)
       fileoriginal <- read.table(namefile, header= TRUE, sep=sepa)
     }
     
-    else 
+    if(typefile == 2)
     {
       #Read file
       #fileoriginal <- read.table(originalfile, header= TRUE, sep="\t")
@@ -463,7 +463,7 @@ results <- function(originaldata, restricfile, typefile, sepa)
     variable_names <- split_name(originaldata)[2]
     
     #Size original data
-    original_size <- length(put_format(originaldata)$Value, typefile, sepa)
+    original_size <- length(put_format(originaldata,typefile, sepa))$Value
     
     #Extract Variable Name
     if(variable_names =='P')
