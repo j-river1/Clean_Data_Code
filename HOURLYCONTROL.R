@@ -457,13 +457,13 @@ hour_to_number <- function(hourformat)
 #-Return: result.  A vector with station name, variable name, size original data,
 #                  and size data after hourly control    
 
-results <- function(originaldata, restricfile)
+results <- function(originaldata, restricfile, typefile, sepa)
 {
     station_name <- split_name(originaldata)[1]
     variable_names <- split_name(originaldata)[2]
     
     #Size original data
-    original_size <- length(put_format(originaldata)$Value)
+    original_size <- length(put_format(originaldata)$Value, typefile, sepa)
     
     #Extract Variable Name
     if(variable_names =='P')
