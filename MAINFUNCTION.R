@@ -46,13 +46,13 @@ dir.create(file.path(mainDir, "AfterDailyControl_Data"), showWarnings = FALSE)
 dir.create(file.path(mainDir, "RandomForest"), showWarnings = FALSE)
 dir.create(file.path(mainDir, "Rmawgen"), showWarnings = FALSE)
 dir.create(file.path(mainDir, "Graphics"), showWarnings = FALSE)
+
 dir.create(file.path(mainDir, "Results"), showWarnings = FALSE)
 dir.create(file.path(mainDir, "Final_Data"), showWarnings = FALSE)
 mainDir <- paste0(mainDir,"/", "Rmawgen" )
 dir.create(file.path(mainDir, "Files_By_Station" ), showWarnings = FALSE)
 mainDir <- paste0(mainDir,"/", "RandomForest" )
-dir.create(file.path(mainDir, "SR" ), showWarnings = FALSE)
-dir.create(file.path(mainDir, "RH" ), showWarnings = FALSE)
+
 
 #Choose Time Data
 #If the time is in terms of hours so TimeData = 1
@@ -110,11 +110,14 @@ setwd("./Original_Data")
 
 #Hourly Control
 #final_results <- mclapply(list.files(), results, restricfile = Hourly_restric ,mc.cores=20)
-final_results <- lapply(list.files(), results, restricfile = Hourly_restric)
+final_results <- lapply(list.files(), results, restricfile = Hourly_restric, typefile =2, sepa = separt)
 
 #Results of Hourly Control
 final_results <- do.call("rbind", final_results)
-colnames(final_results) <- c("Station_Name", "Variable_Name", "OriginalData_Size", "CleanData_Size", "ErrorData_Size")
+final_results$Latitude <- NA
+final_results$Longitude <- NA
+final_results$Altitude <- NA
+colnames(final_results) <- c("Station_Name", "Variable_Name", "OriginalData_Size", "CleanData_Size", "ErrorData_Size", "Latitude", "Longitude", "Altitude")
 write.csv(final_results, file = "../Results/Results_HourlyControl.csv")
 
 
@@ -153,8 +156,11 @@ if(TimeData == 2)
   #Daily Control
   lapply(list.files(path= "./AfterDailyControl_Data"), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt)
   results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, typefile = 1, sepa= separt, time =2)
-  final_results <- do.call("rbind", results)    
-  colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data")
+  final_results <- do.call("rbind", results)
+  final_results$Latitude <- NA
+  final_results$Longitude <- NA
+  final_results$Altitude <- NA
+  colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data", "Latitude", "Longitude", "Altitude")
   write.csv(final_results, file = paste0("./Results/","Results_DailyControl.csv") )
   
   
