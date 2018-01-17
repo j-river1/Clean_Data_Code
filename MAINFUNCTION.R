@@ -15,6 +15,9 @@ library(ggplot2)
 library(randomForest)
 library(RCurl)
 library(data.table)
+library(sp)
+library(rgdal)
+library(geosphere)
 
 
 
