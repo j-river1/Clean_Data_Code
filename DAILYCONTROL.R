@@ -402,7 +402,7 @@ check_amount_NA <- function(file, porcentage)
 }
 
 
-#Check_All_Station_NA works for checking ability all stations
+#Check_All_Station_NA works for choosing stations with meet with porcentage
 #Arguments     - List of all stations 
 #Porcentage    - porcentage amount of NA
 
@@ -421,7 +421,8 @@ Check_All_Station_NA  <- function (listfiles, porcentage)
 
 
 #Choose_stations_Daily chooses station with meets the condition NA
-
+#Arguments    - file
+#             - names_station
 Choose_station_Daily <- function(file, names_station)
 {
   if(!any(split_name(file)[1] %in% names_station ))
@@ -459,7 +460,9 @@ few_NA <- function (file, percentage)
   
 }
 
-
+#Check_All_Station_Few_NA works for knowing which stations have few NA.  
+#listfiles      - list of files 
+#               - percentage of missing values.
 Check_All_Station_Few_NA  <- function (listfiles, percentage)
 {
   
@@ -468,11 +471,48 @@ Check_All_Station_Few_NA  <- function (listfiles, percentage)
   result <- result[!sapply(result, is.null)]
   final_results <- do.call("rbind", result)  
   colnames(final_results) <- c("Station_Name", "Variable_Name")
-  
-  
-  
   write.table(final_results, "./Results/Stations_Few_NA.txt")
   return (final_results)
 }
+
+
+#clusterstations_longlat is for doing the cluster of stations according to latitude and longitude
+#parameters       -file. It has information of latitude and longitute of each station.
+#
+#return           -clusters of nearest stations  
+
+#Results_DailyControl.csv
+
+clusterstations_long_lat <- function(file)
+{
+  
+  #Read the file Daily Information
+  info_station <- read.csv(paste0(getwd(), "/Results/", file), header = T)
+  
+  #latitude and longitude  
+  table <- subset(info_station, Variable_Name == 'P')
+  table <- table[,c("Station_Name", "Latitude", "Longitude", "Altitude")]
+  table <- as.data.frame(table)
+  
+  #Convert data to a SpatialPointsDataFrame object
+  xy <- SpatialPointsDataFrame(matrix(c(table$Latitude ,table$Longitude), ncol=2), data.frame(Station_Name = table$Station_Name), proj4string=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84"))
+  
+  #use the distm for geodesic distance matrix
+  mdist <- distm(xy)
+  
+  hc <- hclust(as.dist(mdist), method="complete")
+  
+  pdf("/Graphics/Cluster_Stations/Cluster.pdf")
+  dev.off()
+  
+  return (xy)
+   
+}
+
+
+
+
+
+
 
 
