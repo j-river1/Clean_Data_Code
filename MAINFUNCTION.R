@@ -101,7 +101,7 @@ End_date <- c("2017-12-31")
 #Separtor between columns
 
 separt <- ""
-
+date_format <- "%Y%m%d"
 
 
 if(TimeData == 1)
