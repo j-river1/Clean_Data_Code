@@ -74,63 +74,6 @@ put_rmawgenformat <- function(files, vari, Start_date, End_date, sepa)
     write.csv(merge_all, file = weather_data, row.names=FALSE)
 }
 
-#missingvalues_rmawgen finds missing values using RMAWGEN package
-#Arguments     -List. List of dairy files 
-#              -varia. variable for finding missing values
-#Return        -List with complete values
-
-#Arguments for Rmawgen
-#Argumentos <- c("Valores")
-#PREC_CLIMATE <- NULL
-#year_max <- 1990
-#SR <- c(1600,0)
-#RH <- c(100,0)
-#LONG <- c(-110.119, NA)
-#LAT <- c(27.51458, NA)
-#TZ <- c("Etc/GMT+7", NA)
-#Read from csv file
-#Start_date <- c("2013-01-11")
-#End_date <- c("2017-10-11")
-
-
-#missingvalues_rmawgen <- function (List, varia, Start_date, End_date)
-#{
-#Read files
-# files_rmwageformat <- put_rmawgenformat(List, varia)
-
-#Format
-#files_rmwageformat$year <- sapply(strsplit(as.character(files_rmwageformat$Date),'-'), "[", 1)
-#files_rmwageformat$month <- sapply(strsplit(as.character(files_rmwageformat$Date),'-'), "[", 2)
-#files_rmwageformat$day <- sapply(strsplit(as.character(files_rmwageformat$Date),'-'), "[", 3)
-
-#Character to numeric
-#files_rmwageformat$year <- as.numeric(files_rmwageformat$year)
-#files_rmwageformat$month <- as.numeric(files_rmwageformat$month)
-#files_rmwageformat$day <- as.numeric(files_rmwageformat$day)
-#files_rmwageformat$Date <- NULL
-
-#Total Days between start and end day
-
-#seq_days <- seq(as.Date(Start_date), as.Date(End_date), by="days")
-#tableALL <- data.frame(seq_days)
-#tableALL <-matrix (NA, ncol= ) 
-#colnames(tableALL) <- c("Date")
-
-#Put Date into columns
-#tableALL$year <- sapply(strsplit(as.character(tableALL$Date),'-'), "[", 1)
-#tableALL$month <- sapply(strsplit(as.character(tableALL$Date),'-'), "[", 2)
-#tableALL$day <- sapply(strsplit(as.character(tableALL$Date),'-'), "[", 3)
-#tableALL$Date <- NULL
-
-#format_rmwage <- merge(tableALL,files_rmwageformat, by = c("year", "month", "day"))
-#format_rmwage <- rbind.fill(tableALL,files_rmwageformat)
-#example <- merge(format_rmwage, files_rmwageformat, all.x=T)
-
-#write.csv(format_rmwage, file = paste0(varia, ".csv"))
-#return(example)
-
-
-#}
 
 
 #choose_stations chooses stations for applying rmwagen
