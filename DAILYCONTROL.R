@@ -265,11 +265,7 @@ info_station<- function(file, percentage, time, typefile, sepa )
     
     numbe_days <- as.double(numbe_days)
     
-#     acceptable_days <- Check_Day_Station(file, percentage)
-#     acceptable_days <- length(acceptable_days)
-#     
-#     result <- data.frame(station_name, variable, star_day, end_day, numbe_days, acceptable_days, percentage)
-#     
+    
     if(time == 1)
     {
         acceptable_days <- Check_Day_Station(file, percentage)
