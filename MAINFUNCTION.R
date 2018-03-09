@@ -157,7 +157,7 @@ if(TimeData == 2)
   #setwd("..")
 
   #Daily Control
-  lapply(list.files(path= "./AfterDailyControl_Data"), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt)
+  lapply(list.files(path= "./AfterDailyControl_Data"), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt, date_format = date_format )
   results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, typefile = 1, sepa= separt, time =2)
   final_results <- do.call("rbind", results)
   final_results$Latitude <- NA
