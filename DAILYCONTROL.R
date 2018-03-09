@@ -290,7 +290,7 @@ info_station<- function(file, percentage, time, typefile, sepa )
 
 
 #results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, typefile = 1, sepa= " ", time =2)
-daily_control <- function (daily_restric, file, typefile, sepa )
+daily_control <- function (daily_restric, file, typefile, sepa, date_format )
 {
   
   #Daily Restrictions
@@ -301,18 +301,23 @@ daily_control <- function (daily_restric, file, typefile, sepa )
   variable <- splitname[2]  
   
   #ReadFile
-  read_file <- convert_units(file, date_format="%Y-%m-%d", typefile, sepa )
+  read_file <- convert_units(file, date_format=date_format, typefile, sepa )
+  
+  if( anyNA(read_file$Date)== TRUE)
+  {
+    stop('There is a problem with date format : ', file)
+  }
   
   if(variable == "RH")
   {
     values_out <- which(read_file$Value < daily_res$RH[2] || read_file$Value > daily_res$RH[1])
     
     if(length(values_out)!=0)
-      {
-        read_file$Value[values_out] <- NA
-        warning("There is a value out of limits ", read_file[values_out,] )
-      }
-  
+    {
+      read_file$Value[values_out] <- NA
+      warning("There is a value out of limits ", read_file[values_out,] )
+    }
+    
   }
   
   if(variable == "TX")
