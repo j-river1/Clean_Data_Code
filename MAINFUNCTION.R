@@ -164,7 +164,15 @@ if(TimeData == 2)
   final_results$Longitude <- NA
   final_results$Altitude <- NA
   colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data", "Latitude", "Longitude", "Altitude")
-  write.csv(final_results, file = paste0("./Results/","Results_DailyControl.csv") )
+  
+  #Station number
+  unique_station <- unique(final_results$Station_Name)
+  station_number <- seq(2, length(unique_station)+1)
+  list_station <- data.frame(Station_Name= unique_station, Num_Station=station_number)
+  
+  total <-merge(final_results,list_station, by = "Station_Name", all.x =TRUE)
+  
+  write.csv( total, file = paste0("./Results/","Results_DailyControl.csv"), row.names = FALSE)
   
   
 }
@@ -182,12 +190,12 @@ put_rmawgenformat(list.files("./AfterDailyControl_Data"), 'P', Start_date, End_d
 
 
 
-#Using Rmwagen 
+#Using Rmwagen Num_Staion is a variable that work for enumerate stations 
 #setwd("./Rmawgen")
-station <- c(13, 14)
-graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_Máxima', manual = 2, choose_station = station)
-graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MIN", 'Temperatura_Mínima', manual = 2, choose_station = station)
-graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "PRECIPITATION", "Precipitación", manual = 2, choose_station = station)
+Num_Station <- c(13, 2)
+graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_Máxima', manual = 2, choose_station = Num_Station )
+graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MIN", 'Temperatura_Mínima', manual = 2, choose_station = Num_Station )
+graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "PRECIPITATION", "Precipitación", manual = 2, choose_station = Num_Station )
 
 
 #Moving and merge files
