@@ -191,3 +191,80 @@ paste_columns <- function(column_date, colum_real, colum_estima)
     return(table)
     
 }
+
+#generate_missing_values generates values of all stations using rmawgen.
+#Arguments    -ListFiles. Lisf of files with format for rmawgen 
+#             -resumefile. Lsit with resumen all stations 
+
+#generate_missing_values(list.files(), list.files()[1],  "PRECIPITATION")
+
+
+generate_missing_values <- function (listFiles, resumefile, variable, manual, choose_station)
+{
+  
+  station_info <- choose_stations(resumefile)
+  #names
+  name_TX <- paste0(getwd(), "/Rmawgen/", "TX.csv")
+  TEMPERATURE_MAX <- read.csv(name_TX, header=T, check.names=FALSE)
+  
+  name_TM <- paste0(getwd(), "/Rmawgen/", "TM.csv")
+  TEMPERATURE_MIN <- read.csv(name_TM, header =T, check.names=FALSE)
+  
+  name_P <- paste0(getwd(), "/Rmawgen/", "P.csv")
+  PRECIPITATION <- read.csv(name_P, header =T, check.names=FALSE)
+
+  if(variable=='TEMPERATURE_MAX')
+  {
+    #Name files
+    generator_values <- lapply(station_info, applying_rmwagen, TEMPERATURE_MAX = TEMPERATURE_MAX, TEMPERATURE_MIN= TEMPERATURE_MIN, PRECIPITATION = PRECIPITATION, menu=1, manual=manual, choose_station = choose_station)
+  }
+  
+  if(variable=='TEMPERATURE_MIN')
+  {
+    generator_values <- lapply(station_info, applying_rmwagen, TEMPERATURE_MAX = TEMPERATURE_MAX, TEMPERATURE_MIN= TEMPERATURE_MIN, PRECIPITATION = PRECIPITATION, menu=2, manual=manual, choose_station = choose_station)
+    
+  }    
+  
+  if(variable=='PRECIPITATION')
+  {
+    
+    generator_values <- lapply(station_info, applying_rmwagen, TEMPERATURE_MAX = TEMPERATURE_MAX, TEMPERATURE_MIN= TEMPERATURE_MIN, PRECIPITATION = PRECIPITATION, menu=3, manual=manual, choose_station = choose_station)
+    
+    
+  }
+  
+  
+  return(generator_values)
+}
+
+
+#choose_stations chooses stations for applying rmwagen
+
+choose_stations <- function(file)
+{
+  #Read file
+  file <- read.csv(file, header = T)
+  #file$Star_Data <- as.Date(file$Star_Data, "%m/%d/%Y")
+  #file$End_Data <- as.Date(file$End_Data, "%m/%d/%Y")
+  
+  file$Star_Data <- as.Date(as.character(file$Star_Data), "%Y-%m-%d")
+  file$End_Data <- as.Date(file$End_Data, "%Y-%m-%d")
+  
+  file$Station_Name <- as.character(file$Station_Name)
+  
+  #Start and End Data
+  Start_End <- data.frame( (file$Station_Name), (file$Star_Data),  (file$End_Data))
+  colnames(Start_End) <- c("Station_Name", "Star_Data", "End_Data")
+  Start_End <- unique(Start_End)
+  
+  #Split by year
+  split_year <- split(Start_End,  as.numeric(format(Start_End$Star_Data, "%Y")))
+  
+  #Grouping by station.
+  
+  group_station <- lapply(split_year, extract_names_data)
+  
+  return (group_station )
+}  
+
+
