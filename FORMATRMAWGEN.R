@@ -4,7 +4,7 @@
 #Return        -List of files 
 #
 
-read_files <- function (files, variable, Start_date, End_date, sepa)
+read_files_form <- function (files, variable, Start_date, End_date, sepa)
 {
     #Check name file
     vari <- variable
@@ -49,7 +49,7 @@ put_rmawgenformat <- function(files, vari, Start_date, End_date, sepa)
 {
     
     #Read files
-    files_reading <- lapply(files, read_files, variable = vari ,Start_date = Start_date, End_date= End_date, sepa=sepa)
+    files_reading <- lapply(files, read_files_form, variable = vari ,Start_date = Start_date, End_date= End_date, sepa=sepa)
     
     #Remove Null
     files_reading = files_reading[-which(sapply(files_reading, is.null))]
