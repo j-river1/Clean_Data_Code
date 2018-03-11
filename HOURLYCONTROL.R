@@ -24,7 +24,7 @@ split_name <- function(filename)
 #           sepa = separator of file 
 #-Return: weather file with format
 
-
+#convert_units <- function(weatherdata, date_format="%Y%m%d", typefile, sepa)
 put_format<- function(originalfile, date_format="%Y%m%d", typefile, sepa)
 {
     
@@ -66,7 +66,9 @@ put_format<- function(originalfile, date_format="%Y%m%d", typefile, sepa)
     {
       #Read file
       #fileoriginal <- read.table(originalfile, header= TRUE, sep="\t")
-      fileoriginal <- read.table(originalfile, header= TRUE, sep=sepa)
+      #fileoriginal <- read.table(originalfile, header= TRUE, sep=sepa)
+      fileoriginal <- read.table(paste0(here(),"/Original_Data/",originalfile), header= TRUE, sep=sepa)
+      
     }
     
     #Check if file is daily or hourly
@@ -121,6 +123,7 @@ put_format<- function(originalfile, date_format="%Y%m%d", typefile, sepa)
 #The convert_units function converts units of the original data set to standard units. 
 #-Arguments: weather data
 #-Return: weather data with standerized units
+#lapply(list.files(here("Original_Data")), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt, date_format = date_format )
 convert_units <- function(weatherdata, date_format="%Y%m%d", typefile, sepa)
 {
     #Read file

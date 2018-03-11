@@ -20,6 +20,7 @@ library(data.table)
 library(sp)
 library(rgdal)
 library(geosphere)
+library(here)
 
 
 
@@ -60,6 +61,7 @@ mainDir <- paste0(mainDir,"/", "RandomForest" )
 #If the time is in terms of hours so TimeData = 1
 #If the time is in terms of days so TimeData = 2
 
+
 TimeData <- 2 
 
 
@@ -80,7 +82,7 @@ Hourly_restric <- data.frame(TX, TM, SR,RH, LONG, LAT, TZ)
 #Variables 
 Start_date <- c("2006-1-1")
 End_date <- c("2017-12-31")
-Percentage <- 0.8
+Percentage <- 0.7
 
 
 #Daily Restrictions as data frame
@@ -92,9 +94,6 @@ SR <- c(1033,0)
 RH <- c(100,0)
 Daily_restric <- data.frame(TX, TM, SR,RH)
 
-#Variables 
-Start_date <- c("2000-1-1")
-End_date <- c("2017-12-31")
 
 
 #Separtor between columns
@@ -147,16 +146,10 @@ if(TimeData == 2)
   names_stations_NA <- Check_All_Station_NA(list.files(path = "./Original_Data"), Percentage)
   names_stations_few_NA <- Check_All_Station_Few_NA (list.files(path = "./Original_Data"), 0.06)
   
-  setwd("./Original_Data")
-  Choose_station_Daily (list.files(), names_stations_NA)
-  setwd("..")
+  lapply(list.files(here("Original_Data")), daily_control, daily_restric = Daily_restric, typefile = 2, sepa = separt, date_format = date_format )
   
-  #setwd("./Original_Data")
-  #file.copy(from=list.files(), to ="../AfterDailyControl_Data")
-  #setwd("..")
-
-  #Daily Control
-  lapply(list.files(path= "./AfterDailyControl_Data"), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt, date_format = date_format )
+  
+  
   results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, typefile = 1, sepa= separt, time =2)
   final_results <- do.call("rbind", results)
   final_results$Latitude <- NA

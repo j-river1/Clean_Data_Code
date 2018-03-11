@@ -302,11 +302,12 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   variable <- splitname[2]  
   
   # #ReadFile
-  read_file <- convert_units(file, date_format=date_format, typefile, sepa )
+  #convert_units <- function(weatherdata, date_format="%Y%m%d", typefile, sepa)
+  read_file <- convert_units(weatherdata=file , date_format=date_format, typefile = typefile, sepa= sepa )
 
   if( anyNA(read_file$Date)== TRUE)
   {
-    stop('There is a problem with date format : ', file)
+    stop('There is a problem with orginal or input of date format: ', file)
   }
 
   if(variable == "RH")
@@ -375,7 +376,7 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   
 
   #write.table(read_file, paste0("./AfterDailyControl_Data/", file), row.names = FALSE)
-  write.table(read_file, paste(here("AfterDailyControl_Data"), file), row.names = FALSE)
+  write.table(read_file, paste0(here(), "/AfterDailyControl_Data/", new_file), row.names = FALSE)
   #write.table(read_file, file, row.names = FALSE)
   #write.table(read_file, file, row.names = FALSE)
   file.copy(from=new_file, to ="../AfterDailyControl_Data")
