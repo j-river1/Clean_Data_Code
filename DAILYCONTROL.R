@@ -375,6 +375,7 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   
 
   #write.table(read_file, paste0("./AfterDailyControl_Data/", file), row.names = FALSE)
+  write.table(read_file, paste(here("AfterDailyControl_Data"), file), row.names = FALSE)
   #write.table(read_file, file, row.names = FALSE)
   #write.table(read_file, file, row.names = FALSE)
   file.copy(from=new_file, to ="../AfterDailyControl_Data")
