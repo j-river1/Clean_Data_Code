@@ -4,7 +4,7 @@
 #Return        -List of files 
 #
 
-read_files <- function (files, variable, Start_date, End_date, sepa,...)
+read_files <- function (files, variable, Start_date, End_date, sepa)
 {
     #Check name file
     vari <- variable
