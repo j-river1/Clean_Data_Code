@@ -517,7 +517,7 @@ Spatial_Information <- function(files = list.files(here("Original_Data")))
   
   #Unique Stations
   uni_station <- unique(files[seque])
-  Info_spatial <- data.frame(Station = uni_station )
+  Info_spatial <- data.frame(Station_Name = uni_station )
   Info_spatial$Latitude <- NA
   Info_spatial$Longitude <- NA
   
