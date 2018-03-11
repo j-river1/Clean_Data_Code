@@ -1,5 +1,6 @@
 
 rm(list=ls()) 
+.rs.restartR()
 
 #Libraries
 library(dplyr)
@@ -145,12 +146,9 @@ if(TimeData == 2)
   #Daily Control NA
   names_stations_NA <- Check_All_Station_NA(list.files(path = "./Original_Data"), Percentage)
   names_stations_few_NA <- Check_All_Station_Few_NA (list.files(path = "./Original_Data"), 0.06)
+  lapply(list.files(here("Original_Data")), daily_control, daily_restric = Daily_restric, sepa = separt, date_format = date_format )
   
-  lapply(list.files(here("Original_Data")), daily_control, daily_restric = Daily_restric, typefile = 2, sepa = separt, date_format = date_format )
-  
-  
-  
-  results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, typefile = 1, sepa= separt, time =2)
+  results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, sepa= separt, time =2)
   final_results <- do.call("rbind", results)
   final_results$Latitude <- NA
   final_results$Longitude <- NA
