@@ -307,7 +307,7 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   if(variable == "RH")
   {
     values_out <- which(read_file$Value < daily_res$RH[2] || read_file$Value > daily_res$RH[1])
-    
+    file <- paste0(splitname[1], "_", variable, "_", "NE")
     if(length(values_out)!=0)
     {
       read_file$Value[values_out] <- NA
@@ -319,7 +319,7 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   if(variable == "TX")
   {
     values_out <- which(read_file$Value < daily_res$TX[2] || read_file$Value > daily_res$TX[1])
-    
+    file <- paste0(splitname[1], "_", variable, "_", "CD")
     if(length(values_out)!=0)
     {
       read_file$Value[values_out] <- NA
@@ -332,6 +332,7 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   if(variable == "TM")
   {
     values_out <- which(read_file$Value < daily_res$TM[2] || read_file$Value > daily_res$TM[1])
+    file <- paste0(splitname[1], "_", variable, "_", "CD")
     
     if(length(values_out)!=0)
     {
@@ -344,6 +345,7 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   if(variable == "SR")
   {
     values_out <- which(read_file$Value < daily_res$SR[2] || read_file$Value > daily_res$SR[1])
+    file <- paste0(splitname[1], "_", variable, "_", "CALCM2")
     
     if(length(values_out)!=0)
     {
@@ -356,6 +358,7 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   if(variable == "P")
   {
     values_out <- which(read_file$Value < daily_res$P[2] || read_file$Value > daily_res$P[1])
+    file <- paste0(splitname[1], "_", variable, "_", "MM" )
     
     if(length(values_out)!=0)
     {
