@@ -249,12 +249,14 @@ SR_hourlytodaily <- function (data_perday, k=3)
 #               percentage. percentage for acceptable day
 #               time. If data is hourly so time = 1. If data is daily so time = 0
 
-info_station<- function(file, percentage, time, typefile, sepa )
+#results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, typefile = 1, sepa= separt, time =2)
+
+info_station<- function(file, percentage, time, sepa )
 {
     station_name <- split_name(file)[1]
     variable <- split_name(file)[2]
     
-    read_file <- convert_units(file, date_format="%Y-%m-%d", typefile, sepa )
+    read_file <- convert_units(file, date_format="%Y-%m-%d", sepa )
     days <- sort(read_file$Date)
     
     star_day<- days[1]
