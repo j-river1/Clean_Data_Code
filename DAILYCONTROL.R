@@ -257,7 +257,7 @@ info_station<- function(file, percentage, time, sepa )
     variable <- split_name(file)[2]
     
     #read_file <- convert_units(file, date_format="%Y-%m-%d", sepa )
-    read_file <- read.table(file, header = T)
+    read_file <- read.table(paste0(here(), "/AfterDailyControl_Data/",file), header = T)
     read_file$Value <- as.double(read_file$Value)
     read_file$Date  <- as.Date(as.character(read_file$Date ), format = "%Y-%m-%d" )
     
