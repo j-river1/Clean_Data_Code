@@ -287,6 +287,10 @@ info_station<- function(file, percentage, time, typefile, sepa )
 
 #results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, typefile = 1, sepa= " ", time =2)
 #lapply(list.files(path= "./AfterDailyControl_Data"), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt, date_format = date_format )
+
+#lapply(list.files(), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt, date_format = date_format )
+
+
 daily_control <- function (daily_restric, file, typefile, sepa, date_format )
 {
   
@@ -369,8 +373,11 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
     
   }
   
+  setwd("..")
+  here("AfterDailyControl_Data")
+  #write.table(read_file, paste0("./AfterDailyControl_Data/", file), row.names = FALSE)
+  write.table(read_file, file, row.names = FALSE)
   
-  write.table(read_file, paste0("./AfterDailyControl_Data/", file), row.names = FALSE)
   return(read_file)
   
 }
