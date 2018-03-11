@@ -58,7 +58,8 @@ put_format<- function(originalfile, date_format="%Y%m%d", typefile, sepa)
     if(typefile == 1)
     {
       namefile <- paste0(getwd(), "/AfterDailyControl_Data/", originalfile)
-      fileoriginal <- read.table(namefile, header= TRUE, sep=sepa)
+      #fileoriginal <- read.table(namefile, header= TRUE, sep=sepa)
+      fileoriginal <- read.table(originalfile, header= TRUE, sep=sepa)
     }
     
     if(typefile == 2)
