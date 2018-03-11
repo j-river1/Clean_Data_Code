@@ -140,13 +140,15 @@ convert_units <- function(weatherdata, date_format="%Y%m%d", typefile, sepa)
         data$Value <- (data$Value-32)/1.8
     }
     
-    #SR:target units is watts per meter square 
-    if(split_name[3]=='CALCM2')
+    
+    
+    #If the units are kWHM2 (kilowatts per meter square) 
+    if(split_name[3]=='KWHM2')
     {
-        #Lang units to watts per meter square . see http://milford.nserl.purdue.edu/weppdocs/sdau-workshop/papers/Solar%20radiation%20unit%20conversions.pdf
-        
-        data$Value <- 41868*data$Value
+      data$Value <- (1000*data$Value)*0.0858
     }
+    
+    #
     return(data)
     
 }
