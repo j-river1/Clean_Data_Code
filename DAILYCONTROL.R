@@ -293,7 +293,7 @@ info_station<- function(file, percentage, time, sepa )
 #lapply(list.files(), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt, date_format = date_format )
 
 
-daily_control <- function (daily_restric, file, typefile, sepa, date_format )
+daily_control <- function (daily_restric, file, sepa, date_format )
 {
   
   #Daily Restrictions
@@ -305,7 +305,7 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   
   # #ReadFile
   #convert_units <- function(weatherdata, date_format="%Y%m%d", typefile, sepa)
-  read_file <- convert_units(weatherdata=file , date_format=date_format, typefile = typefile, sepa= sepa )
+  read_file <- convert_units(weatherdata=file , date_format=date_format, sepa= sepa )
 
   if( anyNA(read_file$Date)== TRUE)
   {
