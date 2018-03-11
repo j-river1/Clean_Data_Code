@@ -1,5 +1,7 @@
-#Libraries
 
+rm(list=ls()) 
+
+#Libraries
 library(dplyr)
 library(stringr)
 library(maptools)
@@ -33,8 +35,6 @@ source("DATAFINAL.R")
 
 
 
-
-
 #The setwd() must be directory where are the source above.
 #Put into the folder Original_Data all weaher files data.
  
@@ -49,7 +49,6 @@ dir.create(file.path(mainDir, "AfterDailyControl_Data"), showWarnings = FALSE)
 dir.create(file.path(mainDir, "RandomForest"), showWarnings = FALSE)
 dir.create(file.path(mainDir, "Rmawgen"), showWarnings = FALSE)
 dir.create(file.path(mainDir, "Graphics"), showWarnings = FALSE)
-
 dir.create(file.path(mainDir, "Results"), showWarnings = FALSE)
 dir.create(file.path(mainDir, "Final_Data"), showWarnings = FALSE)
 mainDir <- paste0(mainDir,"/", "Rmawgen" )
@@ -191,9 +190,9 @@ put_rmawgenformat(list.files("./AfterDailyControl_Data"), 'P', Start_date, End_d
 
 
 #Using Rmwagen Num_Staion is a variable that work for enumerate stations 
-#setwd("./Rmawgen")
-Num_Station <- c(13, 2)
-graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_Máxima', manual = 2, choose_station = Num_Station )
+
+Num_Station <- c(1, 25)
+graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_Máxima', manual = 2, choose_station = Num_Station, year_min=2000, year_max = 2017)
 graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MIN", 'Temperatura_Mínima', manual = 2, choose_station = Num_Station )
 graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "PRECIPITATION", "Precipitación", manual = 2, choose_station = Num_Station )
 
