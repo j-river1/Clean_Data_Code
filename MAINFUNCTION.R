@@ -46,6 +46,7 @@ source("DATAFINAL.R")
 #Create folders
 mainDir <- getwd()
 dir.create(file.path(mainDir, "Original_Data"), showWarnings = FALSE)
+dir.create(file.path(mainDir, "SpatialInformation_InputVariables"), showWarnings = FALSE)
 dir.create(file.path(mainDir, "AfterHourlyControl_Data"), showWarnings = FALSE)
 dir.create(file.path(mainDir, "AfterDailyControl_Data"), showWarnings = FALSE)
 dir.create(file.path(mainDir, "RandomForest"), showWarnings = FALSE)
@@ -78,12 +79,8 @@ RH <- c(100,0)
 LONG <- c(-110.119, NA)
 LAT <- c(27.51458, NA)
 TZ <- c("Etc/GMT+7", NA)
-Hourly_restric <- data.frame(TX, TM, SR,RH, LONG, LAT, TZ)
-
-#Variables 
-Start_date <- c("2006-1-1")
-End_date <- c("2017-12-31")
-Percentage <- 0.7
+Hourly_restric <- data.frame(Variables, TX, TM, SR,RH, LONG, LAT, TZ)
+write.csv(Hourly_restric, paste0(here(),"/SpatialInformation_InputVariables/","Hourly_Restrictions.csv"),row.names = FALSE)
 
 
 #Daily Restrictions as data frame
@@ -93,14 +90,24 @@ TM <- c(48,-10)
 #Calories per centimeter
 SR <- c(1033,0)
 RH <- c(100,0)
-Daily_restric <- data.frame(TX, TM, SR,RH)
+Daily_restric <- data.frame(Variables, TX, TM, SR,RH)
+write.csv(Daily_restric , paste0(here(),"/SpatialInformation_InputVariables/","Daily_Restrictions.csv"), row.names = FALSE)
 
-
-
-#Separtor between columns
-
+#Variables 
+Start_date <- c("2006-1-1")
+End_date <- c("2017-12-31")
+Percentage <- 0.7
 separt <- ""
 date_format <- "%Y%m%d"
+variables <- data.frame(Start_date, End_date, Percentage, separt,date_format)
+write.csv(variables, paste0(here(),"/SpatialInformation_InputVariables/","Input_Variables.csv"), row.names = FALSE)
+
+
+#Information Spatial information of stations. Longitude and Latitude.
+Spatial_Information()
+
+
+
 
 
 if(TimeData == 1)
@@ -153,16 +160,17 @@ if(TimeData == 2)
   final_results$Latitude <- NA
   final_results$Longitude <- NA
   final_results$Altitude <- NA
-  colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data", "Latitude", "Longitude", "Altitude")
+  colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data")
   
   #Station number
   unique_station <- unique(final_results$Station_Name)
   station_number <- seq(2, length(unique_station)+1)
   list_station <- data.frame(Station_Name= unique_station, Num_Station=station_number)
   
-  total <-merge(final_results,list_station, by = "Station_Name", all.x =TRUE)
-  
-  write.csv( total, file = paste0("./Results/","Results_DailyControl.csv"), row.names = FALSE)
+  lat_Lon_El <- read.csv(paste0(here(),"/SpatialInformation_InputVariables/","Information_Spatial_Stations.csv"))
+    
+  total <-merge(lat_Lon_El,final_results, by = "Station_Name", all.y =TRUE)
+  write.csv( total, file = paste0(here(), "/Results/","Results_DailyControl.csv"), row.names = FALSE)
   
   
 }
@@ -172,9 +180,9 @@ if(TimeData == 2)
 
 
 #File with format for using  Rmwagen
-put_rmawgenformat(list.files("./AfterDailyControl_Data"), 'TX', Start_date, End_date, sepa =separt)
-put_rmawgenformat(list.files("./AfterDailyControl_Data"), 'TM', Start_date, End_date, sepa =separt)
-put_rmawgenformat(list.files("./AfterDailyControl_Data"), 'P', Start_date, End_date, sepa =separt)
+put_rmawgenformat(list.files(here("AfterDailyControl_Data")), 'TX')
+put_rmawgenformat(list.files(here("AfterDailyControl_Data")), 'TM')
+put_rmawgenformat(list.files(here("AfterDailyControl_Data")), 'P')
 
 
 

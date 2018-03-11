@@ -4,16 +4,27 @@
 #Return        -List of files 
 #
 
-read_files_form <- function (files, variable, Start_date, End_date, sepa)
+read_files_form <- function (files, variable)
 {
     #Check name file
     vari <- variable
+    
+    #Start and End Data
+    file <- read.csv(paste0(here(),"/Results/","Results_DailyControl.csv"), header = T)
+    file$Star_Data <- as.Date(as.character(file$Star_Data), format = "%Y-%m-%d")
+    Start_date<- min(as.double(format(file$Star_Data, "%Y")))
+    Start_date <- paste0(Start_date, "-1-1")
+    
+    
+    file$End_Data <- as.Date(as.character(file$End_Data), format = "%Y-%m-%d")
+    End_date<- max(as.double(format(file$End_Data, "%Y")))
+    End_date <- paste0(End_date, "-12-31")
     
     if(split_name(files)[2] == vari)
     {
         #Read file
         namefile <- paste0(getwd(), "/AfterDailyControl_Data/", files)
-        read_file <- read.table(namefile, header = T, sep = sepa )
+        read_file <- read.table(namefile, header = T)
         
         #read_file <- read.table(files, header = T, sep = sepa )
         
@@ -45,11 +56,11 @@ read_files_form <- function (files, variable, Start_date, End_date, sepa)
 
 #put_rmawgenformat(list.files("./AfterDailyControl_Data"), 'TX', Start_date, End_date)
 
-put_rmawgenformat <- function(files, vari, Start_date, End_date, sepa)
+put_rmawgenformat <- function(files, vari)
 {
     
     #Read files
-    files_reading <- lapply(files, read_files_form, variable = vari ,Start_date = Start_date, End_date= End_date, sepa=sepa)
+    files_reading <- lapply(files, read_files_form, variable = vari)
     
     #Remove Null
     files_reading = files_reading[-which(sapply(files_reading, is.null))]
