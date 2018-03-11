@@ -45,7 +45,7 @@ put_format<- function(originalfile, date_format="%Y%m%d", typefile, sepa)
     #MJM2 = Megajoules per meter suare
     #CALCM2 = Calories per meter square
     
-    variablesunits = c("CD", "FD","MM", "NE", "WAM2","MJM2", "CALCM2") 
+    variablesunits = c("CD", "FD","MM", "NE", "WAM2","MJM2", "CALCM2", "KWHM2", "WHM2") 
     
     if(all(str_detect(variablesnames, fixed(split_name[2]))== FALSE)== TRUE){stop('Not valid variable name : ', originalfile)}
     if(all(str_detect(variablesunits, fixed(split_name[3]))== FALSE)== TRUE){stop('Not valid unit : ', originalfile)}
@@ -140,15 +140,17 @@ convert_units <- function(weatherdata, date_format="%Y%m%d", typefile, sepa)
         data$Value <- (data$Value-32)/1.8
     }
     
-    
-    
     #If the units are kWHM2 (kilowatts per meter square) 
     if(split_name[3]=='KWHM2')
     {
       data$Value <- (1000*data$Value)*0.0858
     }
     
-    #
+    #If the units are WHM2 (watts per meter square) 
+    if(split_name[3]=="WHM2")
+    {
+      data$Value <- (data$Value)*0.0858
+    }
     return(data)
     
 }
