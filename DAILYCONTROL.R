@@ -301,82 +301,86 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   splitname <- split_name(file)
   variable <- splitname[2]  
   
-  #ReadFile
+  # #ReadFile
   read_file <- convert_units(file, date_format=date_format, typefile, sepa )
-  
+
   if( anyNA(read_file$Date)== TRUE)
   {
     stop('There is a problem with date format : ', file)
   }
-  
+
   if(variable == "RH")
   {
     values_out <- which(read_file$Value < daily_res$RH[2] || read_file$Value > daily_res$RH[1])
-    file <- paste0(splitname[1], "_", variable, "_", "NE", ".txt")
+    new_file <- paste0(splitname[1], "_", variable, "_", "NE", ".txt")
     if(length(values_out)!=0)
     {
       read_file$Value[values_out] <- NA
       warning("There is a value out of limits ", read_file[values_out,] )
     }
-    
+
   }
-  
+
   if(variable == "TX")
   {
     values_out <- which(read_file$Value < daily_res$TX[2] || read_file$Value > daily_res$TX[1])
-    file <- paste0(splitname[1], "_", variable, "_", "CD", ".txt")
+    new_file <- paste0(splitname[1], "_", variable, "_", "CD", ".txt")
     if(length(values_out)!=0)
     {
       read_file$Value[values_out] <- NA
       warning("There is a value out of limits ", read_file[values_out,] )
     }
-    
+
   }
-  
-  
+
+
   if(variable == "TM")
   {
     values_out <- which(read_file$Value < daily_res$TM[2] || read_file$Value > daily_res$TM[1])
-    file <- paste0(splitname[1], "_", variable, "_", "CD", ".txt")
-    
+    new_file <- paste0(splitname[1], "_", variable, "_", "CD", ".txt")
+
     if(length(values_out)!=0)
     {
       read_file$Value[values_out] <- NA
       warning("There is a value out of limits ", read_file[values_out,] )
     }
-    
+
   }
-  
+
   if(variable == "SR")
   {
     values_out <- which(read_file$Value < daily_res$SR[2] || read_file$Value > daily_res$SR[1])
-    file <- paste0(splitname[1], "_", variable, "_", "CALCM2", ".txt")
-    
+    new_file <- paste0(splitname[1], "_", variable, "_", "CALCM2", ".txt")
+
     if(length(values_out)!=0)
     {
       read_file$Value[values_out] <- NA
       warning("There is a value out of limits ", read_file[values_out,] )
     }
-    
+
   }
-  
+
   if(variable == "P")
   {
     values_out <- which(read_file$Value < daily_res$P[2] || read_file$Value > daily_res$P[1])
-    file <- paste0(splitname[1], "_", variable, "_", "MM", ".txt" )
-    
+    new_file <- paste0(splitname[1], "_", variable, "_", "MM", ".txt" )
+
     if(length(values_out)!=0)
     {
       read_file$Value[values_out] <- NA
       warning("There is a value out of limits ", read_file[values_out,] )
     }
-    
+
   }
   
-  setwd("..")
-  here("AfterDailyControl_Data")
+
   #write.table(read_file, paste0("./AfterDailyControl_Data/", file), row.names = FALSE)
-  write.table(read_file, file, row.names = FALSE)
+  #write.table(read_file, file, row.names = FALSE)
+  #write.table(read_file, file, row.names = FALSE)
+  file.copy(from=new_file, to ="../AfterDailyControl_Data")
+  
+  
+  
   
   return(read_file)
   
