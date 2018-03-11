@@ -13,7 +13,7 @@ graph_station <- function (Station_table, variable)
     name <- unique(Station_table$Station_Names)
     
     #Units
-    if(variable == 'Temperatura_Máxima' || variable == 'Temperatura_Mínima')
+    if(variable == "Temperatura_Máxima" || variable == 'Temperatura_Mínima')
     {
         y = "Grados_Centigrados"
     }
@@ -126,11 +126,11 @@ graph_station <- function (Station_table, variable)
 
 #graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_M?xima', manual = 2, choose_station = c(24,7))
 
-graph_all <- function(listFiles, resumefile, variable_rmw, variable_plot, manual, choose_station)
+graph_all <- function(listFiles, resumefile, variable_rmw, variable_plot, manual, choose_station, year_min, year_max)
 {
     
     #Data
-    data_all <- generate_missing_values (listFiles, resumefile, variable_rmw, manual, choose_station)
+    data_all <- generate_missing_values (listFiles, resumefile, variable_rmw, manual, choose_station,  year_min, year_max)
     
     #Table per station
     table_station <- lapply(data_all, table_graph, resumefile = resumefile)
@@ -199,7 +199,7 @@ paste_columns <- function(column_date, colum_real, colum_estima)
 #generate_missing_values(list.files(), list.files()[1],  "PRECIPITATION")
 
 
-generate_missing_values <- function (listFiles, resumefile, variable, manual, choose_station)
+generate_missing_values <- function (listFiles, resumefile, variable, manual, choose_station, year_min, year_max)
 {
   
   station_info <- choose_stations(resumefile)
@@ -216,7 +216,7 @@ generate_missing_values <- function (listFiles, resumefile, variable, manual, ch
   if(variable=='TEMPERATURE_MAX')
   {
     #Name files
-    generator_values <- lapply(station_info, applying_rmwagen, TEMPERATURE_MAX = TEMPERATURE_MAX, TEMPERATURE_MIN= TEMPERATURE_MIN, PRECIPITATION = PRECIPITATION, menu=1, manual=manual, choose_station = choose_station)
+    generator_values <- lapply(station_info, applying_rmwagen, TEMPERATURE_MAX = TEMPERATURE_MAX, TEMPERATURE_MIN= TEMPERATURE_MIN, PRECIPITATION = PRECIPITATION, menu=1, manual=manual, choose_station = choose_station, year_min = year_min, year_max=year_max)
   }
   
   if(variable=='TEMPERATURE_MIN')
