@@ -286,6 +286,7 @@ info_station<- function(file, percentage, time, typefile, sepa )
 
 
 #results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, typefile = 1, sepa= " ", time =2)
+#lapply(list.files(path= "./AfterDailyControl_Data"), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt, date_format = date_format )
 daily_control <- function (daily_restric, file, typefile, sepa, date_format )
 {
   
@@ -307,7 +308,7 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   if(variable == "RH")
   {
     values_out <- which(read_file$Value < daily_res$RH[2] || read_file$Value > daily_res$RH[1])
-    file <- paste0(splitname[1], "_", variable, "_", "NE")
+    file <- paste0(splitname[1], "_", variable, "_", "NE", ".txt")
     if(length(values_out)!=0)
     {
       read_file$Value[values_out] <- NA
@@ -319,7 +320,7 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   if(variable == "TX")
   {
     values_out <- which(read_file$Value < daily_res$TX[2] || read_file$Value > daily_res$TX[1])
-    file <- paste0(splitname[1], "_", variable, "_", "CD")
+    file <- paste0(splitname[1], "_", variable, "_", "CD", ".txt")
     if(length(values_out)!=0)
     {
       read_file$Value[values_out] <- NA
@@ -332,7 +333,7 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   if(variable == "TM")
   {
     values_out <- which(read_file$Value < daily_res$TM[2] || read_file$Value > daily_res$TM[1])
-    file <- paste0(splitname[1], "_", variable, "_", "CD")
+    file <- paste0(splitname[1], "_", variable, "_", "CD", ".txt")
     
     if(length(values_out)!=0)
     {
@@ -345,7 +346,7 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   if(variable == "SR")
   {
     values_out <- which(read_file$Value < daily_res$SR[2] || read_file$Value > daily_res$SR[1])
-    file <- paste0(splitname[1], "_", variable, "_", "CALCM2")
+    file <- paste0(splitname[1], "_", variable, "_", "CALCM2", ".txt")
     
     if(length(values_out)!=0)
     {
@@ -358,7 +359,7 @@ daily_control <- function (daily_restric, file, typefile, sepa, date_format )
   if(variable == "P")
   {
     values_out <- which(read_file$Value < daily_res$P[2] || read_file$Value > daily_res$P[1])
-    file <- paste0(splitname[1], "_", variable, "_", "MM" )
+    file <- paste0(splitname[1], "_", variable, "_", "MM", ".txt" )
     
     if(length(values_out)!=0)
     {
