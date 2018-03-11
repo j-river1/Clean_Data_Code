@@ -25,7 +25,7 @@ split_name <- function(filename)
 #-Return: weather file with format
 
 #convert_units <- function(weatherdata, date_format="%Y%m%d", typefile, sepa)
-put_format<- function(originalfile, date_format="%Y%m%d", typefile, sepa)
+put_format<- function(originalfile, date_format="%Y%m%d", sepa)
 {
     
     #Check format name file. The name is composed by two parts. The first is 
@@ -52,24 +52,8 @@ put_format<- function(originalfile, date_format="%Y%m%d", typefile, sepa)
     
     
     #Read file
-    #fileoriginal <- read.table(originalfile, header= TRUE, sep="\t")
-    
-    
-    if(typefile == 1)
-    {
-      namefile <- paste0(getwd(), "/AfterDailyControl_Data/", originalfile)
-      #fileoriginal <- read.table(namefile, header= TRUE, sep=sepa)
-      fileoriginal <- read.table(originalfile, header= TRUE, sep=sepa)
-    }
-    
-    if(typefile == 2)
-    {
-      #Read file
-      #fileoriginal <- read.table(originalfile, header= TRUE, sep="\t")
-      #fileoriginal <- read.table(originalfile, header= TRUE, sep=sepa)
-      fileoriginal <- read.table(paste0(here(),"/Original_Data/",originalfile), header= TRUE, sep=sepa)
-      
-    }
+    fileoriginal <- read.table(paste0(here(),"/Original_Data/",originalfile), header= TRUE, sep=sepa)
+
     
     #Check if file is daily or hourly
     #if it has two columns it is daily 
