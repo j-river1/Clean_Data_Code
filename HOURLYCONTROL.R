@@ -108,10 +108,10 @@ put_format<- function(originalfile, date_format="%Y%m%d", sepa)
 #-Arguments: weather data
 #-Return: weather data with standerized units
 #lapply(list.files(here("Original_Data")), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt, date_format = date_format )
-convert_units <- function(weatherdata, date_format="%Y%m%d", typefile, sepa)
+convert_units <- function(weatherdata, date_format="%Y%m%d", sepa)
 {
     #Read file
-    data <- put_format(weatherdata,date_format, typefile, sepa)
+    data <- put_format(weatherdata,date_format, sepa)
     
     #Extract variable names and units
     split_name <- split_name(weatherdata) 
@@ -505,4 +505,27 @@ move_files_txt <- function(from, to, format ="\\.txt$")
     file.remove(files_txt) 
     
 }
+
+
+#Spatial_information works for populate latitude and longitude information of station
+
+Spatial_Information <- function(files = list.files(here("Original_Data")))
+{
+  #Name station
+  files <- split_name(list.files(here("Original_Data")))
+  seque <- seq(1, length(files), by=3)
+  
+  #Unique Stations
+  uni_station <- unique(files[seque])
+  Info_spatial <- data.frame(Station = uni_station )
+  Info_spatial$Latitude <- NA
+  Info_spatial$Longitude <- NA
+  
+  write.csv(Info_spatial, paste0(here(),"/SpatialInformation_InputVariables/Information_Spatial_Stations.csv"))
+
+  
+}
+
+
+
 
