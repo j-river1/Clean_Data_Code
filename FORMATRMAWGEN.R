@@ -89,31 +89,67 @@ put_rmawgenformat <- function(files, vari)
 
 #choose_stations chooses stations for applying rmwagen
 
-choose_stations <- function(file)
+choose_stations <- function()
 {
-    #Read file
-    file <- read.csv(file, header = T)
-    #file$Star_Data <- as.Date(file$Star_Data, "%m/%d/%Y")
-    #file$End_Data <- as.Date(file$End_Data, "%m/%d/%Y")
+
+    #Clustering for stations
+    #Read file with longitude and latitude
+    file_long_lat <- read.csv(paste0(here(),"/Results/","Results_DailyControl.csv"), header = T)
     
-    file$Star_Data <- as.Date(as.character(file$Star_Data), "%Y-%m-%d")
-    file$End_Data <- as.Date(file$End_Data, "%Y-%m-%d")
+    #Read value of distance clustering
+    dist_est <- read.csv(paste0(here(),"/SpatialInformation_InputVariables/","Input_Variables.csv"), header = T)
     
-    file$Station_Name <- as.character(file$Station_Name)
     
-    #Start and End Data
-    Start_End <- data.frame( (file$Station_Name), (file$Star_Data),  (file$End_Data))
-    colnames(Start_End) <- c("Station_Name", "Star_Data", "End_Data")
-    Start_End <- unique(Start_End)
+    file_station <- file_long_lat[, -c(4:7)]
+    file_station <- unique(file_station) 
     
-    #Split by year
-    split_year <- split(Start_End,  as.numeric(format(Start_End$Star_Data, "%Y")))
+    long <- file_station$Longitude
+    lati <- file_station$Latitude
+    name <- file_station$Latitude
     
-    #Grouping by station.
     
-    group_station <- lapply(split_year, extract_names_data)
+    long_lati <- SpatialPointsDataFrame(
+      matrix(c(long,lati), ncol=2), data.frame(Station_Name=file_station$Station_Name),
+      proj4string=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84"))
     
-    return (group_station )
+    mdist <- distm(long_lati)
+    hc <- hclust(as.dist(mdist), method="complete")
+
+    
+    # define the distance threshold, in this case 10000 m or 10Km
+    d=dist_est$dist_Station
+    
+    # define clusters based on a tree "height" cutoff "d" and add them to the SpDataFrame
+    long_lati$clust <- cutree(hc, h=d)
+    
+    
+    # expand the extent of plotting frame
+    long_lati@bbox[] <- as.matrix(extend(extent(long_lati),0.001))
+    
+    # get the centroid coords for each cluster
+    cent <- matrix(ncol=2, nrow=max(long_lati$clust))
+    for (i in 1:max(long_lati$clust))
+      # gCentroid from the rgeos package
+      cent[i,] <- gCentroid(subset(long_lati, clust == i))@coords
+    
+    # compute circles around the centroid coords using a 40m radius
+    # from the dismo package
+    ci <- circles(cent, d=d, lonlat=T)
+    
+
+    jpeg(paste0(here(), "/Graphics/Clustering_Stations/Clustering_Stations.jpeg"))
+    plot(ci@polygons, axes=T, main = paste("Clustering Stations to", "\n", d, " meters") )
+    plot(long_lati, col=rainbow(4)[factor(long_lati$clust)], add=T)
+    dev.off()
+    
+    
+    #Start and end data 
+    data_star_end <- file_long_lat[,c("Station_Name", "Star_Data", "End_Data","Variable_Name")]
+    data_star_end  <- unique(data_star_end )
+    total <- merge(long_lati@data, data_star_end, by= "Station_Name", all.x= TRUE)
+    write.csv(long_lati@data, paste0(here(), "/Results/Clustering_Stations.csv"))
+    
+
 }  
 
 
