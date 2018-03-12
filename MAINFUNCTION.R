@@ -22,6 +22,9 @@ library(sp)
 library(rgdal)
 library(geosphere)
 library(here)
+library(sp)
+library(rgdal)
+library(geosphere)
 
 
 
@@ -157,26 +160,22 @@ if(TimeData == 2)
   
   results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, sepa= separt, time =2)
   final_results <- do.call("rbind", results)
-  final_results$Latitude <- NA
-  final_results$Longitude <- NA
-  final_results$Altitude <- NA
   colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data")
   
   #Station number
   unique_station <- unique(final_results$Station_Name)
   station_number <- seq(2, length(unique_station)+1)
-  list_station <- data.frame(Station_Name= unique_station, Num_Station=station_number)
+  list_station <- data.frame(Station_Name= unique_station)
   
   lat_Lon_El <- read.csv(paste0(here(),"/SpatialInformation_InputVariables/","Information_Spatial_Stations.csv"))
+  lat_Lon_El$Station_Name <- as.character(lat_Lon_El$Station_Name )
+  final_results$Station_Name <- as.character(final_results$Station_Name)
     
-  total <-merge(lat_Lon_El,final_results, by = "Station_Name", all.y =TRUE)
+  total <-merge(lat_Lon_El,final_results, by = c("Station_Name"), all =TRUE)
   write.csv( total, file = paste0(here(), "/Results/","Results_DailyControl.csv"), row.names = FALSE)
   
   
 }
-
-#Change Directory to After Daily Data
-#setwd("./AfterDailyControl_Data")
 
 
 #File with format for using  Rmwagen
