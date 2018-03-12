@@ -520,8 +520,8 @@ Spatial_Information <- function(files = list.files(here("Original_Data")))
   Info_spatial <- data.frame(Station_Name = uni_station )
   Info_spatial$Latitude <- NA
   Info_spatial$Longitude <- NA
-  
-  write.csv(Info_spatial, paste0(here(),"/SpatialInformation_InputVariables/Information_Spatial_Stations.csv"))
+  Info_spatial$Altitude <- NA
+  write.csv(Info_spatial, paste0(here(),"/SpatialInformation_InputVariables/Information_Spatial_Stations.csv"), row.names = FALSE)
 
   
 }
