@@ -4,7 +4,7 @@
 #             -resumefile. Lsit with resumen all stations 
 
 #generate_missing_values(list.files(), list.files()[1],  "PRECIPITATION")
-generate_missing_values <- function (listFiles, resumefile, variable, manual, choose_station, year_min, year_max)
+generate_missing_values <- function (variable, choose_station)
 {
     
     #station_info <- choose_stations(resumefile)
@@ -189,11 +189,11 @@ applying_rmwagen_2 <- function (TEMPERATURE_MAX, TEMPERATURE_MIN, PRECIPITATION,
   
   #Read year max and min of input
   year_min <- as.Date(as.character(variables$Start_date), format="%Y-%m-%d")
-  year_min <- format(year_min, format="%Y")
+  year_min <- as.numeric(format(year_min, format="%Y"))
   
   
   year_max <- as.Date(as.character(variables$End_date), format="%Y-%m-%d")
-  year_max <- format(year_max, format="%Y")
+  year_max <- as.numeric(format(year_max, format="%Y"))
   
 
   All_data <- seq(as.Date(paste0(year_min,"-1-1")), as.Date(paste0(year_max, "-12-31")), by="days")
