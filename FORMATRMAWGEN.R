@@ -147,7 +147,7 @@ choose_stations <- function()
     data_star_end <- file_long_lat[,c("Station_Name", "Star_Data", "End_Data","Variable_Name")]
     data_star_end  <- unique(data_star_end )
     total <- merge(long_lati@data, data_star_end, by= "Station_Name", all.x= TRUE)
-    write.csv(long_lati@data, paste0(here(), "/Results/Clustering_Stations.csv"))
+    write.csv(total, paste0(here(), "/Results/Clustering_Stations.csv"))
     
 
 }  
