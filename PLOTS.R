@@ -126,11 +126,11 @@ graph_station <- function (Station_table, variable)
 
 #graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_M?xima', manual = 2, choose_station = c(24,7))
 
-graph_all <- function(listFiles, resumefile, variable_rmw, variable_plot, manual, choose_station, year_min, year_max)
+graph_all <- function(variable_rmw, variable_plot, choose_station)
 {
     
     #Data
-    data_all <- generate_missing_values (listFiles, resumefile, variable_rmw, manual, choose_station,  year_min, year_max)
+    data_all <- generate_missing_values (variable_rmw, choose_station)
     
     #Table per station
     table_station <- lapply(data_all, table_graph, resumefile = resumefile)
@@ -199,72 +199,45 @@ paste_columns <- function(column_date, colum_real, colum_estima)
 #generate_missing_values(list.files(), list.files()[1],  "PRECIPITATION")
 
 
-generate_missing_values <- function (listFiles, resumefile, variable, manual, choose_station, year_min, year_max)
-{
-  
-  station_info <- choose_stations(resumefile)
-  #names
-  name_TX <- paste0(getwd(), "/Rmawgen/", "TX.csv")
-  TEMPERATURE_MAX <- read.csv(name_TX, header=T, check.names=FALSE)
-  
-  name_TM <- paste0(getwd(), "/Rmawgen/", "TM.csv")
-  TEMPERATURE_MIN <- read.csv(name_TM, header =T, check.names=FALSE)
-  
-  name_P <- paste0(getwd(), "/Rmawgen/", "P.csv")
-  PRECIPITATION <- read.csv(name_P, header =T, check.names=FALSE)
-
-  if(variable=='TEMPERATURE_MAX')
-  {
-    #Name files
-    generator_values <- lapply(station_info, applying_rmwagen, TEMPERATURE_MAX = TEMPERATURE_MAX, TEMPERATURE_MIN= TEMPERATURE_MIN, PRECIPITATION = PRECIPITATION, menu=1, manual=manual, choose_station = choose_station, year_min = year_min, year_max=year_max)
-  }
-  
-  if(variable=='TEMPERATURE_MIN')
-  {
-    generator_values <- lapply(station_info, applying_rmwagen, TEMPERATURE_MAX = TEMPERATURE_MAX, TEMPERATURE_MIN= TEMPERATURE_MIN, PRECIPITATION = PRECIPITATION, menu=2, manual=manual, choose_station = choose_station)
-    
-  }    
-  
-  if(variable=='PRECIPITATION')
-  {
-    
-    generator_values <- lapply(station_info, applying_rmwagen, TEMPERATURE_MAX = TEMPERATURE_MAX, TEMPERATURE_MIN= TEMPERATURE_MIN, PRECIPITATION = PRECIPITATION, menu=3, manual=manual, choose_station = choose_station)
-    
-    
-  }
-  
-  
-  return(generator_values)
-}
-
-
-# #choose_stations chooses stations for applying rmwagen
-# 
-# choose_stations <- function(file)
+# generate_missing_values <- function (variable, choose_station, year_min, year_max)
 # {
-#   #Read file
-#   file <- read.csv(file, header = T)
-#   #file$Star_Data <- as.Date(file$Star_Data, "%m/%d/%Y")
-#   #file$End_Data <- as.Date(file$End_Data, "%m/%d/%Y")
 #   
-#   file$Star_Data <- as.Date(as.character(file$Star_Data), "%Y-%m-%d")
-#   file$End_Data <- as.Date(file$End_Data, "%Y-%m-%d")
+#   #station_info <- choose_stations(resumefile)
+#   #names
+#   name_TX <- paste0(here(), "/Rmawgen/", "TX.csv")
+#   TEMPERATURE_MAX <- read.csv(name_TX, header=T, check.names=FALSE)
 #   
-#   file$Station_Name <- as.character(file$Station_Name)
+#   name_TM <- paste0(here(), "/Rmawgen/", "TM.csv")
+#   TEMPERATURE_MIN <- read.csv(name_TM, header =T, check.names=FALSE)
 #   
-#   #Start and End Data
-#   Start_End <- data.frame( (file$Station_Name), (file$Star_Data),  (file$End_Data))
-#   colnames(Start_End) <- c("Station_Name", "Star_Data", "End_Data")
-#   Start_End <- unique(Start_End)
+#   name_P <- paste0(here(), "/Rmawgen/", "P.csv")
+#   PRECIPITATION <- read.csv(name_P, header =T, check.names=FALSE)
+# 
+#   if(variable=='TEMPERATURE_MAX')
+#   {
+#     #Name files
+#     generator_values <- lapply(station_info, applying_rmwagen, TEMPERATURE_MAX = TEMPERATURE_MAX, TEMPERATURE_MIN= TEMPERATURE_MIN, PRECIPITATION = PRECIPITATION, menu=1, manual=manual, choose_station = choose_station, year_min = year_min, year_max=year_max)
+#   }
 #   
-#   #Split by year
-#   split_year <- split(Start_End,  as.numeric(format(Start_End$Star_Data, "%Y")))
+#   if(variable=='TEMPERATURE_MIN')
+#   {
+#     generator_values <- lapply(station_info, applying_rmwagen, TEMPERATURE_MAX = TEMPERATURE_MAX, TEMPERATURE_MIN= TEMPERATURE_MIN, PRECIPITATION = PRECIPITATION, menu=2, manual=manual, choose_station = choose_station)
+#     
+#   }    
 #   
-#   #Grouping by station.
+#   if(variable=='PRECIPITATION')
+#   {
+#     
+#     generator_values <- lapply(station_info, applying_rmwagen, TEMPERATURE_MAX = TEMPERATURE_MAX, TEMPERATURE_MIN= TEMPERATURE_MIN, PRECIPITATION = PRECIPITATION, menu=3, manual=manual, choose_station = choose_station)
+#     
+#     
+#   }
 #   
-#   group_station <- lapply(split_year, extract_names_data)
 #   
-#   return (group_station )
-# }  
+#   return(generator_values)
+# }
+
+
+
 
 
