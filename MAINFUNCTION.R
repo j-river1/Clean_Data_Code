@@ -25,7 +25,9 @@ library(here)
 library(sp)
 library(rgdal)
 library(geosphere)
-
+library(ggdendro)
+library(dismo)
+library(rgeos)
 
 
 #Load functions
@@ -59,7 +61,9 @@ dir.create(file.path(mainDir, "Results"), showWarnings = FALSE)
 dir.create(file.path(mainDir, "Final_Data"), showWarnings = FALSE)
 mainDir <- paste0(mainDir,"/", "Rmawgen" )
 dir.create(file.path(mainDir, "Files_By_Station" ), showWarnings = FALSE)
-mainDir <- paste0(mainDir,"/", "RandomForest" )
+mainDir <- paste0(mainDir,"/", "Graphics" )
+dir.create(file.path(mainDir, "Clustering_Stations"), showWarnings = FALSE)
+
 
 
 #Choose Time Data
@@ -102,6 +106,7 @@ End_date <- c("2017-12-31")
 Percentage <- 0.7
 separt <- ""
 date_format <- "%Y%m%d"
+dista_Station <- 20000
 variables <- data.frame(Start_date, End_date, Percentage, separt,date_format)
 write.csv(variables, paste0(here(),"/SpatialInformation_InputVariables/","Input_Variables.csv"), row.names = FALSE)
 
