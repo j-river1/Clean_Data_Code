@@ -13,7 +13,7 @@ graph_station <- function (Station_table, variable)
     name <- unique(Station_table$Station_Names)
     
     #Units
-    if(variable == "Temperatura_Máxima" || variable == 'Temperatura_Mínima')
+    if(variable == "Temperatura_Maxima" || variable == 'Temperatura_Mínima')
     {
         y = "Grados_Centigrados"
     }
@@ -60,7 +60,7 @@ graph_station <- function (Station_table, variable)
     ggsave(nameFile, plot=graph)
     
     
-    if(variable == 'Temperatura_Máxima' )
+    if(variable == 'Temperatura_Maxima' )
     {
         
         namefile = "TX"
@@ -133,15 +133,18 @@ graph_all <- function(variable_rmw, variable_plot, choose_station)
     data_all <- generate_missing_values (variable_rmw, choose_station)
     
     #Table per station
-    table_station <- lapply(data_all, table_graph, resumefile = resumefile)
+    #table_station <- lapply(data_all, table_graph)
+    table_station <- table_graph(data_all)
     lapply(table_station, function(x) lapply(x, graph_station, variable = variable_plot))
+    
+
 }
 
 
 
 #table_graph makes tables for plotting
 
-table_graph <- function(list, resumefile)
+table_graph <- function(list)
 {
     
     #List with data
@@ -153,33 +156,37 @@ table_graph <- function(list, resumefile)
     num_stations <- length(colnames(data_real)) 
     
     #Extract start and end data
-    info_station <- read.csv(resumefile, header= TRUE)
-    info_station$Station_Name <- as.character(info_station$Station_Name)
-    info_station$Star_Data <- as.Date(info_station$Star_Data, format = "%Y-%m-%d")
-    info_station$End_Data <- as.Date(info_station$End_Data, format = "%Y-%m-%d")
+    #info_station <- read.csv(resumefile, header= TRUE)
+    #info_station <- read.csv(paste0(here(),"/Results/Results_DailyControl.csv"), header = TRUE)
     
-    info_station <- unique(info_station[,c("Station_Name", "Star_Data",  "End_Data" ) ])
-    info_station <- subset(info_station, Station_Name %in% colnames(data_real))   
+    # info_station$Station_Name <- as.character(info_station$Station_Name)
+    # info_station$Star_Data <- as.Date(info_station$Star_Data, format = "%Y-%m-%d")
+    # info_station$End_Data <- as.Date(info_station$End_Data, format = "%Y-%m-%d")
+    # 
+    # info_station <- unique(info_station[,c("Station_Name", "Star_Data",  "End_Data" ) ])
+    # info_station <- subset(info_station, Station_Name %in% colnames(data_real))   
+    # 
     
-    station <- list()
+    
+    station_table <- list()
     name_station <- list()
     
     #Station 
     for ( i in 1 :num_stations)
     {
         name_station[[i]]  <- rep(colnames(data_real)[i], length(data_real[,i]))
-        station[[i]] <- data.frame(date, data_real[,i], data_estimated[,i],name_station[[i]])
-        names(station[[i]]) <- c("Date", "Real_Data", "Estimated_Data", "Station_Names")
-        star_date <- subset(info_station, Station_Name %in% colnames(data_real)[i])
-        star <- star_date$Star_Data
-        end <- star_date$End_Data
-        station[[i]]  <- subset(station[[i]], Date >= star & Date <= end )
+        station_table[[i]] <- data.frame(date, data_real[,i], data_estimated[,i],name_station[[i]])
+        names(station_table[[i]]) <- c("Date", "Real_Data", "Estimated_Data", "Station_Names")
+        #star_date <- subset(info_station, Station_Name %in% colnames(data_real)[i])
+        #star <- star_date$Star_Data
+        #end <- star_date$End_Data
+        #station[[i]]  <- subset(station[[i]], Date >= star & Date <= end )
         
     }    
     
-    names(station) <- colnames(data_real)
+    names(station_table) <- colnames(data_real)
     
-    return (station)
+    return (station_table)
 }
 
 #paste_columns paste three columns  three columns
