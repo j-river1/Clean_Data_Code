@@ -105,50 +105,58 @@ choose_stations <- function()
     
     long <- file_station$Longitude
     lati <- file_station$Latitude
-    name <- file_station$Latitude
-    
-    
-    long_lati <- SpatialPointsDataFrame(
-      matrix(c(long,lati), ncol=2), data.frame(Station_Name=file_station$Station_Name),
-      proj4string=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84"))
-    
-    mdist <- distm(long_lati)
-    hc <- hclust(as.dist(mdist), method="complete")
 
+    if(is.na(long)== TRUE || is.na(lati)== TRUE)
+    {
+      
+      warning("Update longitud and latitude stations in the Information_Spatial_Stations file  in the folder SpatialInformation_InputVariables ")
+    }
     
-    # define the distance threshold, in this case 10000 m or 10Km
-    d=dist_est$dist_Station
-    
-    # define clusters based on a tree "height" cutoff "d" and add them to the SpDataFrame
-    long_lati$clust <- cutree(hc, h=d)
-    
-    
-    # expand the extent of plotting frame
-    long_lati@bbox[] <- as.matrix(extend(extent(long_lati),0.001))
-    
-    # get the centroid coords for each cluster
-    cent <- matrix(ncol=2, nrow=max(long_lati$clust))
-    for (i in 1:max(long_lati$clust))
-      # gCentroid from the rgeos package
-      cent[i,] <- gCentroid(subset(long_lati, clust == i))@coords
-    
-    # compute circles around the centroid coords using a 40m radius
-    # from the dismo package
-    ci <- circles(cent, d=d, lonlat=T)
-    
-
-    jpeg(paste0(here(), "/Graphics/Clustering_Stations/Clustering_Stations.jpeg"))
-    plot(ci@polygons, axes=T, main = paste("Clustering Stations to", "\n", d, " meters") )
-    plot(long_lati, col=rainbow(4)[factor(long_lati$clust)], add=T)
-    dev.off()
-    
-    
-    #Start and end data 
-    data_star_end <- file_long_lat[,c("Station_Name", "Star_Data", "End_Data","Variable_Name")]
-    data_star_end  <- unique(data_star_end )
-    total <- merge(long_lati@data, data_star_end, by= "Station_Name", all.x= TRUE)
-    write.csv(total, paste0(here(), "/Results/Clustering_Stations.csv"))
-    
+    else
+    {
+      long_lati <- SpatialPointsDataFrame(
+        matrix(c(long,lati), ncol=2), data.frame(Station_Name=file_station$Station_Name),
+        proj4string=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84"))
+      
+      mdist <- distm(long_lati)
+      hc <- hclust(as.dist(mdist), method="complete")
+      
+      
+      # define the distance threshold, in this case 10000 m or 10Km
+      d=dist_est$dist_Station
+      
+      # define clusters based on a tree "height" cutoff "d" and add them to the SpDataFrame
+      long_lati$clust <- cutree(hc, h=d)
+      
+      
+      # expand the extent of plotting frame
+      long_lati@bbox[] <- as.matrix(extend(extent(long_lati),0.001))
+      
+      # get the centroid coords for each cluster
+      cent <- matrix(ncol=2, nrow=max(long_lati$clust))
+      for (i in 1:max(long_lati$clust))
+        # gCentroid from the rgeos package
+        cent[i,] <- gCentroid(subset(long_lati, clust == i))@coords
+      
+      # compute circles around the centroid coords using a 40m radius
+      # from the dismo package
+      ci <- circles(cent, d=d, lonlat=T)
+      
+      
+      jpeg(paste0(here(), "/Graphics/Clustering_Stations/Clustering_Stations.jpeg"))
+      plot(ci@polygons, axes=T, main = paste("Clustering Stations to", "\n", d, " meters") )
+      plot(long_lati, col=rainbow(4)[factor(long_lati$clust)], add=T)
+      dev.off()
+      
+      
+      #Start and end data 
+      data_star_end <- file_long_lat[,c("Station_Name", "Star_Data", "End_Data","Variable_Name")]
+      data_star_end  <- unique(data_star_end )
+      total <- merge(long_lati@data, data_star_end, by= "Station_Name", all.x= TRUE)
+      write.csv(total, paste0(here(), "/Results/Clustering_Stations.csv"))
+      
+    }
+ 
 
 }  
 
