@@ -2,7 +2,7 @@
 #generate_missing_values generates values of all stations using rmawgen.
 #Arguments    -ListFiles. Lisf of files with format for rmawgen 
 #             -resumefile. Lsit with resumen all stations 
-
+#
 #generate_missing_values(list.files(), list.files()[1],  "PRECIPITATION")
 generate_missing_values <- function (variable, choose_station)
 {
