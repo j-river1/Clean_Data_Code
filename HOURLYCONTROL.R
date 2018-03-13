@@ -516,7 +516,7 @@ Spatial_Information <- function(files = list.files(here("Original_Data")))
   
   if(length(files)==0)
   {
-    warning("Please put the original weather files in the folder Original Data ")
+    warning("Please put the original weather files in the Original_Data folder ")
   }
   
   else
