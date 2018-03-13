@@ -135,8 +135,10 @@ graph_all <- function(variable_rmw, variable_plot, choose_station)
     #Table per station
     #table_station <- lapply(data_all, table_graph)
     table_station <- table_graph(data_all)
-    lapply(table_station, function(x) lapply(x, graph_station, variable = variable_plot))
-    
+    #lapply(table_station, function(x) lapply(x, graph_station, variable = variable_plot))
+    #(Station_table, variable)
+    #graph_station (table_station)
+    lapply(table_station, graph_station, variable =  variable_plot)
 
 }
 
