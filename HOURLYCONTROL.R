@@ -513,16 +513,25 @@ Spatial_Information <- function(files = list.files(here("Original_Data")))
 {
   #Name station
   files <- split_name(list.files(here("Original_Data")))
-  seque <- seq(1, length(files), by=3)
   
-  #Unique Stations
-  uni_station <- unique(files[seque])
-  Info_spatial <- data.frame(Station_Name = uni_station )
-  Info_spatial$Latitude <- NA
-  Info_spatial$Longitude <- NA
-  Info_spatial$Altitude <- NA
-  write.csv(Info_spatial, paste0(here(),"/SpatialInformation_InputVariables/Information_Spatial_Stations.csv"), row.names = FALSE)
-
+  if(length(files)==0)
+  {
+    warning("Please put the original weather files in the folder Original Data ")
+  }
+  
+  else
+  {
+    seque <- seq(1, length(files), by=3)
+    
+    #Unique Stations
+    uni_station <- unique(files[seque])
+    Info_spatial <- data.frame(Station_Name = uni_station )
+    Info_spatial$Latitude <- NA
+    Info_spatial$Longitude <- NA
+    Info_spatial$Altitude <- NA
+    write.csv(Info_spatial, paste0(here(),"/SpatialInformation_InputVariables/Information_Spatial_Stations.csv"), row.names = FALSE)
+    
+  }
   
 }
 
