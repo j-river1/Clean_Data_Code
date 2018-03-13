@@ -61,7 +61,8 @@ dir.create(file.path(mainDir, "Results"), showWarnings = FALSE)
 dir.create(file.path(mainDir, "Final_Data"), showWarnings = FALSE)
 mainDir <- paste0(mainDir,"/", "Rmawgen" )
 dir.create(file.path(mainDir, "Files_By_Station" ), showWarnings = FALSE)
-mainDir <- paste0(mainDir,"/", "Graphics" )
+mainDir <- getwd()
+mainDir <-  paste0(mainDir,"/", "Graphics" )
 dir.create(file.path(mainDir, "Clustering_Stations"), showWarnings = FALSE)
 
 
@@ -102,12 +103,12 @@ write.csv(Daily_restric , paste0(here(),"/SpatialInformation_InputVariables/","D
 
 #Variables 
 Start_date <- c("2006-1-1")
-End_date <- c("2017-12-31")
+End_date <- c("2010-12-31")
 Percentage <- 0.7
 separt <- ""
 date_format <- "%Y%m%d"
-dista_Station <- 20000
-variables <- data.frame(Start_date, End_date, Percentage, separt,date_format)
+dist_Station <- 20000
+variables <- data.frame(Start_date, End_date, Percentage, separt,date_format, dist_Station)
 write.csv(variables, paste0(here(),"/SpatialInformation_InputVariables/","Input_Variables.csv"), row.names = FALSE)
 
 
@@ -182,6 +183,8 @@ if(TimeData == 2)
   
 }
 
+#Stations for Rmwagen
+choose_stations() 
 
 #File with format for using  Rmwagen
 put_rmawgenformat(list.files(here("AfterDailyControl_Data")), 'TX')
@@ -194,7 +197,11 @@ put_rmawgenformat(list.files(here("AfterDailyControl_Data")), 'P')
 
 #Using Rmwagen Num_Staion is a variable that work for enumerate stations 
 
-Num_Station <- c(1, 25)
+station <- c("11045010", "13075020")
+graph_all("TEMPERATURE_MAX", 'Temperatura_Maxima', station)
+graph_all("TEMPERATURE_MIN", 'Temperatura_Minima', station)
+graph_all("TEMPERATURE_MIN", 'Precipitacion', station)
+
 graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_Máxima', manual = 2, choose_station = Num_Station, year_min=2000, year_max = 2017)
 graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MIN", 'Temperatura_Mínima', manual = 2, choose_station = Num_Station )
 graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "PRECIPITATION", "Precipitación", manual = 2, choose_station = Num_Station )
