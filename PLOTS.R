@@ -13,18 +13,18 @@ graph_station <- function (Station_table, variable)
     name <- unique(Station_table$Station_Names)
     
     #Units
-    if(variable == "Temperatura_Maxima" || variable == 'Temperatura_Mínima')
+    if(variable == "Temperatura_Maxima" || variable == 'Temperatura_Minima')
     {
         y = "Grados_Centigrados"
     }
     
-    if(variable == 'Precipitación')
+    if(variable == 'Precipitacion')
     {
         
         y = "Mililitros"
     }
     
-    if(variable == 'Radiación_Solar')
+    if(variable == 'Radiacion_Solar')
     {
         y = "Calorias_cm2_diarios"
     }
@@ -66,20 +66,20 @@ graph_station <- function (Station_table, variable)
         namefile = "TX"
     }
     
-    if(variable == 'Temperatura_Mínima' )
+    if(variable == 'Temperatura_Minima' )
     {
         
         namefile = "TM"
     }
     
     
-    if(variable == 'Precipitación')
+    if(variable == 'Precipitacion')
     {
         
         namefile = "P"
     }
     
-    if(variable == 'Radiación_Solar')
+    if(variable == 'Radiacion_Solar')
     {
         namefile = "SR"
     }
