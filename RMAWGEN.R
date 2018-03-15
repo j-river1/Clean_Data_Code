@@ -9,13 +9,13 @@ generate_missing_values <- function (variable, choose_station)
     
     #station_info <- choose_stations(resumefile)
     #names
-    name_TX <- paste0(getwd(), "/Rmawgen/", "TX.csv")
+    name_TX <- paste0(here(), "/Rmawgen/", "TX.csv")
     TEMPERATURE_MAX <- read.csv(name_TX, header=T, check.names = FALSE)
     
-    name_TM <- paste0(getwd(), "/Rmawgen/", "TM.csv")
+    name_TM <- paste0(here(), "/Rmawgen/", "TM.csv")
     TEMPERATURE_MIN <- read.csv(name_TM, header =T, check.names = FALSE)
     
-    name_P <- paste0(getwd(), "/Rmawgen/", "P.csv")
+    name_P <- paste0(here(), "/Rmawgen/", "P.csv")
     PRECIPITATION <- read.csv(name_P, header =T, check.names = FALSE)
 
     
