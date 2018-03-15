@@ -216,7 +216,7 @@ applying_rmwagen_2 <- function (TEMPERATURE_MAX, TEMPERATURE_MIN, PRECIPITATION,
        error = function(e)
          if(e$message == "row names supplied are of the wrong length")
            
-           stop(paste("The station :", station," doesnt have any information on maximum or minimum temperature ")), 
+           stop(paste("The station :", station," doesnt have any information on maximum or minimum temperature \n")), 
        warning=function(w) 
          w)
 
@@ -239,7 +239,7 @@ applying_rmwagen_2 <- function (TEMPERATURE_MAX, TEMPERATURE_MIN, PRECIPITATION,
        error = function(e)
          if(e$message == "row names supplied are of the wrong length")
            
-           stop(paste("The stations :", station," doesnt have any information on maximum or minimum temperature ")), 
+           stop(paste("The stations :", station," doesnt have any information on maximum or minimum temperature \n")), 
        warning=function(w) 
          w)
     real_data <- generationTemperature$input$Tn_mes
