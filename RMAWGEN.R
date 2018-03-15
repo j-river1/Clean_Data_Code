@@ -198,25 +198,27 @@ applying_rmwagen_2 <- function (TEMPERATURE_MAX, TEMPERATURE_MIN, PRECIPITATION,
 
   All_data <- seq(as.Date(paste0(year_min,"-1-1")), as.Date(paste0(year_max, "-12-31")), by="days")
   
-  generationTemperature <- tryCatch(ComprehensiveTemperatureGenerator(
-                                                                      station=station,
-                                                                      Tx_all=TEMPERATURE_MAX,
-                                                                      Tn_all=TEMPERATURE_MIN,
-                                                                      year_min=year_min,
-                                                                      year_max=year_max,
-                                                                      p=5,
-                                                                      n_GPCA_iteration=n_GPCA_iter,
-                                                                      n_GPCA_iteration_residuals=n_GPCA_iteration_residuals,
-                                                                      sample="monthly"),
-                                                                      error = function(e)
-                                                                      if(e$message == "row names supplied are of the wrong length")
-                                                                        "Problems with something",
-                                                                      warning=function(w) 
-                                                                      w)
+
                            
   
    if(menu == 1 )
    {
+     generationTemperature <- tryCatch(ComprehensiveTemperatureGenerator(
+       station=station,
+       Tx_all=TEMPERATURE_MAX,
+       Tn_all=TEMPERATURE_MIN,
+       year_min=year_min,
+       year_max=year_max,
+       p=5,
+       n_GPCA_iteration=n_GPCA_iter,
+       n_GPCA_iteration_residuals=n_GPCA_iteration_residuals,
+       sample="monthly"),
+       error = function(e)
+         if(e$message == "row names supplied are of the wrong length")
+           
+           stop(paste("The stations :", station," dont have information in maximum or minimum temperature")), 
+       warning=function(w) 
+         w)
 
      real_data <- generationTemperature$input$Tx_mes
      fill_data <-generationTemperature$out$Tx_gen
@@ -224,6 +226,22 @@ applying_rmwagen_2 <- function (TEMPERATURE_MAX, TEMPERATURE_MIN, PRECIPITATION,
 
    if(menu == 2)
   {
+     generationTemperature <- tryCatch(ComprehensiveTemperatureGenerator(
+       station=station,
+       Tx_all=TEMPERATURE_MAX,
+       Tn_all=TEMPERATURE_MIN,
+       year_min=year_min,
+       year_max=year_max,
+       p=5,
+       n_GPCA_iteration=n_GPCA_iter,
+       n_GPCA_iteration_residuals=n_GPCA_iteration_residuals,
+       sample="monthly"),
+       error = function(e)
+         if(e$message == "row names supplied are of the wrong length")
+           
+           stop(paste("The stations :", station," dont have information in maximum or minimum temperature")), 
+       warning=function(w) 
+         w)
     real_data <- generationTemperature$input$Tn_mes
     fill_data <-generationTemperature$out$Tn_gen
   }
