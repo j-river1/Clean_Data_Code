@@ -407,9 +407,14 @@ check_amount_NA <- function(file, porcentage)
   #Read table 
   table <- read.table(paste0("./Original_Data/", file), header = TRUE)
   
+  #Count days
+  number_length  <- as.numeric(as.Date(as.character(table$Date[length(table$Date)]), format = date_format)- as.Date(as.character(table$Date[1]), format = date_format))
+  
+  
+  
   #Count the NA
   number_NA <- sum(is.na(table$Value))
-  number_length <- length(table$Value)
+  #number_length <- length(table$Value)
   
   if(number_NA/number_length > porcentage)
   {
