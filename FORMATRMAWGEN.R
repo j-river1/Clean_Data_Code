@@ -109,7 +109,7 @@ choose_stations <- function()
     if(is.na(long)== TRUE || is.na(lati)== TRUE)
     {
       
-      warning("Update longitud and latitude stations in the Information_Spatial_Stations file  in the folder SpatialInformation_InputVariables ")
+      warning("Update longitud and latitude stations in the Information_Spatial_Stations file  in the folder SpatialInformation_InputVariables. Then run line 176")
     }
     
     else
@@ -123,7 +123,7 @@ choose_stations <- function()
       
       
       # define the distance threshold, in this case 10000 m or 10Km
-      d=dist_est$dist_Station
+      d=dist_est$Distance_Cluster_Station
       
       # define clusters based on a tree "height" cutoff "d" and add them to the SpDataFrame
       long_lati$clust <- cutree(hc, h=d)
