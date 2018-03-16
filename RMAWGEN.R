@@ -256,7 +256,7 @@ applying_rmwagen_2 <- function (TEMPERATURE_MAX, TEMPERATURE_MIN, PRECIPITATION,
     {
       warning("There is a problem with distribution of Precipitation. This is very biased to zero")
       PRECIPITATION[station] <- PRECIPITATION[station] + 4
-      generation_prec <- ComprehensivePrecipitationGenerator(
+      generation_prec <- tryCatch(ComprehensivePrecipitationGenerator(
         station=station,
         prec_all=PRECIPITATION,
         year_min=year_min,
@@ -266,8 +266,18 @@ applying_rmwagen_2 <- function (TEMPERATURE_MAX, TEMPERATURE_MIN, PRECIPITATION,
         n_GPCA_iteration_residuals= 0,
         sample = "monthly",
         no_spline = FALSE,
-        nscenario = 20)
-
+        nscenario = 20), error = function(e)
+          if(e$message == "zero non-NA points")
+            {
+             matrix_aux <- PRECIPITATION[, c(station, "year")]
+             selected_dates <- subset(matrix_aux, year >= year_min & year <= year_max)
+             result <- summary(selected_dates)
+             print(as.matrix(result))
+             stop(paste("Check the number of NA per station. Rmwagen needs that ALL stations don't have all theirs values with NA"))
+            }, 
+        warning=function(w) 
+          w
+      )
       real_data <- generation_prec$prec_mes - 4
       fill_data <- generation_prec$prec_gen - 4
 
