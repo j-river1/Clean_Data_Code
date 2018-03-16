@@ -267,14 +267,17 @@ applying_rmwagen_2 <- function (TEMPERATURE_MAX, TEMPERATURE_MIN, PRECIPITATION,
         sample = "monthly",
         no_spline = FALSE,
         nscenario = 20), error = function(e)
-          if(e$message == "zero non-NA points")
+        {
+          if(e$message == "zero non-NA points" || e$message == "missing value where TRUE/FALSE needed")
             {
              matrix_aux <- PRECIPITATION[, c(station, "year")]
              selected_dates <- subset(matrix_aux, year >= year_min & year <= year_max)
              result <- summary(selected_dates)
              print(as.matrix(result))
-             stop(paste("Check the number of NA per station. Rmwagen needs that ALL stations don't have all theirs values with NA"))
-            }, 
+             stop(paste("Check the number of NA per station. There are a lot of NA respect to total days."))
+            }
+
+          }, 
         warning=function(w) 
           w
       )
