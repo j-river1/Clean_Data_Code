@@ -67,15 +67,6 @@ dir.create(file.path(mainDir, "Clustering_Stations"), showWarnings = FALSE)
 
 
 
-#Choose Time Data
-#If the time is in terms of hours so TimeData = 1
-#If the time is in terms of days so TimeData = 2
-
-
-TimeData <- 2 
-
-
-
 
 #Hourly Restrictions as data frame
 Variables <- c("Vmin", "Vmax")
@@ -101,25 +92,31 @@ RH <- c(100,0)
 Daily_restric <- data.frame(Variables, TX, TM, SR,RH)
 write.csv(Daily_restric , paste0(here(),"/SpatialInformation_InputVariables/","Daily_Restrictions.csv"), row.names = FALSE)
 
-#Variables 
+
+#Variables
+#Choose Time Data
+#If the time is in terms of hours so Hourly_Daily  = 1
+#If the time is in terms of days so Hourly_Daily  = 2
+
+Hourly_Daily <- 2
 Start_date <- c("2006-1-1")
 End_date <- c("2010-12-31")
 Percentage <- 0.7
 separt <- ""
 date_format <- "%Y%m%d"
 dist_Station <- 20000
-variables <- data.frame(Start_date, End_date, Percentage, separt,date_format, dist_Station)
+variables <- data.frame("Star_date"=Start_date, "End_date"=End_date, "Approved_percentage"= Percentage, "separt"=separt,"Date_Format"=date_format, "Distance_Cluster_Station"=dist_Station, "Time_Type"=Hourly_Daily)
 write.csv(variables, paste0(here(),"/SpatialInformation_InputVariables/","Input_Variables.csv"), row.names = FALSE)
 
 
 #Information Spatial information of stations. Longitude and Latitude.
 Spatial_Information()
 
+print("Update longitude and latitude in the file Information_Spatial_Stations in the foler SpatialInformation_InputVariables")
 
 
 
-
-if(TimeData == 1)
+if(variables$Time_Type == 1)
 {
   
 #Change directory Original_Data
@@ -156,23 +153,19 @@ write.csv(final_results, file = paste0("../Results/","Results_DailyControl.csv")
 
 }
 
-if(TimeData == 2)
+if(variables$Time_Type  == 2)
 {
   
   #Daily Control NA
-  names_stations_NA <- Check_All_Station_NA(list.files(path = "./Original_Data"), Percentage)
+  names_stations_NA <- Check_All_Station_NA(list.files(path = "./Original_Data"), variables$Approved_percentage)
   names_stations_few_NA <- Check_All_Station_Few_NA (list.files(path = "./Original_Data"), 0.06)
   lapply(list.files(here("Original_Data")), daily_control, daily_restric = Daily_restric, sepa = separt, date_format = date_format )
   
-  results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, sepa= separt, time =2)
+  results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage= variables$Approved_percentage, sepa = variables$separt, time =2)
   final_results <- do.call("rbind", results)
   colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data")
   
   #Station number
-  unique_station <- unique(final_results$Station_Name)
-  station_number <- seq(2, length(unique_station)+1)
-  list_station <- data.frame(Station_Name= unique_station)
-  
   lat_Lon_El <- read.csv(paste0(here(),"/SpatialInformation_InputVariables/","Information_Spatial_Stations.csv"))
   lat_Lon_El$Station_Name <- as.character(lat_Lon_El$Station_Name )
   final_results$Station_Name <- as.character(final_results$Station_Name)
@@ -197,14 +190,15 @@ put_rmawgenformat(list.files(here("AfterDailyControl_Data")), 'P')
 
 #Using Rmwagen Num_Staion is a variable that work for enumerate stations 
 
-station <- c("11045010", "13075020")
+
+station <- c("13030010", "13037040")
 graph_all("TEMPERATURE_MAX", 'Temperatura_Maxima', station)
 graph_all("TEMPERATURE_MIN", 'Temperatura_Minima', station)
-graph_all("TEMPERATURE_MIN", 'Precipitacion', station)
+graph_all("PRECIPITATION", 'Precipitacion', station)
 
-graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_Máxima', manual = 2, choose_station = Num_Station, year_min=2000, year_max = 2017)
-graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MIN", 'Temperatura_Mínima', manual = 2, choose_station = Num_Station )
-graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "PRECIPITATION", "Precipitación", manual = 2, choose_station = Num_Station )
+#graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_Máxima', manual = 2, choose_station = Num_Station, year_min=2000, year_max = 2017)
+#graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MIN", 'Temperatura_Mínima', manual = 2, choose_station = Num_Station )
+#graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "PRECIPITATION", "Precipitación", manual = 2, choose_station = Num_Station )
 
 
 #Moving and merge files
