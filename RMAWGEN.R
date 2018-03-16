@@ -188,7 +188,7 @@ applying_rmwagen_2 <- function (TEMPERATURE_MAX, TEMPERATURE_MIN, PRECIPITATION,
   station <- choose_station
   
   #Read year max and min of input
-  year_min <- as.Date(as.character(variables$Start_date), format="%Y-%m-%d")
+  year_min <- as.Date(as.character(variables$Star_date), format="%Y-%m-%d")
   year_min <- as.numeric(format(year_min, format="%Y"))
   
   
