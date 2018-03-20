@@ -86,8 +86,8 @@ write.csv(Hourly_restric, paste0(here(),"/SpatialInformation_InputVariables/","H
 Variables <- c("Vmin", "Vmax")
 TX <- c(48,0)
 TM <- c(48,-10)
-#Calories per centimeter
-SR <- c(1033,0)
+#Calories per centimeter. Multiply 12*0.0858
+SR <- c(1029,0)
 RH <- c(100,0)
 Daily_restric <- data.frame(Variables, TX, TM, SR,RH)
 write.csv(Daily_restric , paste0(here(),"/SpatialInformation_InputVariables/","Daily_Restrictions.csv"), row.names = FALSE)
@@ -99,8 +99,8 @@ write.csv(Daily_restric , paste0(here(),"/SpatialInformation_InputVariables/","D
 #If the time is in terms of days so Hourly_Daily  = 2
 
 Hourly_Daily <- 2
-Start_date <- c("2006-1-1")
-End_date <- c("2010-12-31")
+Start_date <- c("2005-1-1")
+End_date <- c("2012-12-31")
 Percentage <- 0.7
 separt <- ""
 date_format <- "%Y%m%d"
