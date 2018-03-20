@@ -196,13 +196,9 @@ graph_all("TEMPERATURE_MAX", 'Temperatura_Maxima', station)
 graph_all("TEMPERATURE_MIN", 'Temperatura_Minima', station)
 graph_all("PRECIPITATION", 'Precipitacion', station)
 
-#graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MAX", 'Temperatura_Máxima', manual = 2, choose_station = Num_Station, year_min=2000, year_max = 2017)
-#graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "TEMPERATURE_MIN", 'Temperatura_Mínima', manual = 2, choose_station = Num_Station )
-#graph_all (list.files(pattern = "\\.csv$"), "./Results/Results_DailyControl.csv", "PRECIPITATION", "Precipitación", manual = 2, choose_station = Num_Station )
-
 
 #Moving and merge files
-setwd("./Rmawgen/Files_By_Station")
+#setwd("./Rmawgen/Files_By_Station")
 #Moving ALL files and Files_By_Station
 move_files_SR_HR()
 match_files(list.files(), "../../Results/Results_DailyControl.csv", type=1)
