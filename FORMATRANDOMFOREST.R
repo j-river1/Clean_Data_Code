@@ -52,8 +52,12 @@ label_for_files <- function (name)
 
 move_files_SR_HR <- function ()
 {
-  list_files_SR <- list.files("../../AfterDailyControl_Data", pattern ="_SR_")
-  list_files_RH <- list.files("../../AfterDailyControl_Data", pattern ="_RH_")
+  #list_files_SR <- list.files("../../AfterDailyControl_Data", pattern ="_SR_")
+  #list_files_RH <- list.files("../../AfterDailyControl_Data", pattern ="_RH_")
+  
+  
+  list_files_SR <- list.files(here("AfterDailyControl_Data"), pattern ="_SR_")
+  list_files_RH <- list.files(here("AfterDailyControl_Data"), pattern ="_RH_")
   
   lapply(list_files_SR, copy_paste_files)
   lapply(list_files_RH, copy_paste_files)
@@ -71,9 +75,10 @@ paste_name <- function(namefile)
 #copy_extension works for making path of files
 copy_paste_files <- function(namefile)
 {
+
   name_comp <- paste_name(namefile)
-  path_from <- paste0("../../AfterDailyControl_Data/", namefile)
-  path_to <- paste0("../../Rmawgen/Files_By_Station/", name_comp)
+  path_from <- paste0(here("AfterDailyControl_Data"), "/", namefile)
+  path_to <- paste0(here("Rmawgen", "Files_By_Station"), "/",name_comp)
   file.copy(path_from, path_to)
   
 }
