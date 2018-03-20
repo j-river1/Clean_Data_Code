@@ -540,9 +540,220 @@ clusterstations_long_lat <- function(file)
 }
 
 
+#time_step calculates arrival time of signal to station.
+#-Arguments: weatherdata = data per day with columns Date, Hour, Value and HourDecimal. This is output of put_format
+#          : unit_hour = return hour format.  minutes = "mins", seconds= "secs". Default units = "mins" 
+#-Return: delay time in minutes
 
 
 
+time_step <- function(weatherdata, unit_hour = "mins")
+{
+  
+  #The arrival time of signal is time more frequently of arrivals time.
+  #Each time arrival is equal to diffence between t_i - t_i-1.
+  
+  weather_data <- as.data.frame(weatherdata)
+  colnames(weather_data) <- c("Date","Hour","Value", "HourDecimal")
+  
+  
+  #Convert Hour to Decimal
+  decimal_hour <- as.difftime(weather_data$Hour, format="%H:%M:%S", units= unit_hour)
+  
+  
+  #Time arrival of each signal 
+  time_arrival <- diff(decimal_hour)
+  
+  #If there is only one data per day.
+  if(length(time_arrival)==0)
+  {
+    time_more_frequ <- 0
+  }
+  else
+  {
+    #Time more frequently
+    #frecuen <- sort(table(time_arrival), drecreasing = TRUE)
+    time_more_frequ <- as.numeric(names(which.max((table(time_arrival)))))
+    
+    #time_more_frequ <- as.numeric(names(frecuen)[1])
+  }
+  return(time_more_frequ)
+}  
+
+
+
+
+#hour_solarnoon_sunrise function calculates solar noon and sunrise hour according to position (latitude and longitude) and day
+#-Arguments: day, lat: latitude, long: longitude, timezo: time zone (ID) see OlsonNames(), typeofhour = "sunrise" or typeofhour ="solarnoo". 
+#-Return:  A list with hour solarnoo and sunrise.
+
+
+hour_solarnoon_sunrise <- function (day, lat, long, timezo, typeofhour) 
+{
+  #format
+  long <- long[1]
+  lat <- lat[1]
+  timezo <- as.character(timezo)[1]
+  day <- as.character(day)
+  
+  #Calculates sunrise and soloarnoon hour
+  portsmouth <- matrix(c(long, lat), nrow=1)
+  for_date <- as.POSIXct(day)
+  time_sunrise <- sunriset(portsmouth, for_date, direction="sunrise", POSIXct.out=TRUE)
+  hour_suns <- as.POSIXlt(time_sunrise$time, timezo)
+  
+  
+  time_solarnoon <- solarnoon(portsmouth, for_date, POSIXct.out=TRUE)
+  hour_noon <- as.POSIXlt(time_solarnoon$time, timezo)
+  
+  
+  #Return hour
+  hour_suns <-strsplit(as.character(hour_suns), split=" ", fixed = TRUE)[[1]][2]
+  hour_noon <-strsplit(as.character(hour_noon), split=" ", fixed = TRUE)[[1]][2]
+  
+  if(typeofhour == "sunrise")
+  {
+    result_hour <- hour_suns
+  }
+  
+  if(typeofhour == "solarnoon")
+  {
+    result_hour <- hour_noon
+  }
+  
+  
+  return(result_hour)
+  
+}
+
+#The put_formatfunction  has two objectives. The first is to check that the file has a correct 
+#format name nombredelaestacion_variable e.g. 12313_P.txt. 
+#The second is to put format the variables, as follows: DATE tipo day, Hour tipo hora, Value tipo double.
+
+#-Argument: is weather file.
+#           typefile = Specific Folder
+#           sepa = separator of file 
+#-Return: weather file with format
+
+#convert_units <- function(weatherdata, date_format="%Y%m%d", typefile, sepa)
+put_format<- function(originalfile, date_format="%Y%m%d", sepa)
+{
+  
+  #Check format name file. The name is composed by two parts. The first is 
+  #name station that has only numbers, and the second name variable.
+  split_name <- split_name(originalfile)
+  
+  
+  #Those are variables for weather data.
+  variablesnames <- c("TX","TM","RH","SR","P")
+  
+  #Those are units for variables.
+  #CD = Celsius Degree
+  #FD = Falherein Degree
+  #MM = Milliliters 
+  #NE = A number between 0 and 100
+  #WAM2 = Watts per meter square
+  #MJM2 = Megajoules per meter suare
+  #CALCM2 = Calories per meter square
+  
+  variablesunits = c("CD", "FD","MM", "NE", "WAM2","MJM2", "CALCM2", "KWHM2", "WHM2") 
+  
+  if(all(str_detect(variablesnames, fixed(split_name[2]))== FALSE)== TRUE){stop('Not valid variable name : ', originalfile)}
+  if(all(str_detect(variablesunits, fixed(split_name[3]))== FALSE)== TRUE){stop('Not valid unit : ', originalfile)}
+  
+  
+  #Read file
+  fileoriginal <- read.table(paste0(here(),"/Original_Data/",originalfile), header= TRUE, sep=sepa)
+  
+  
+  #Check if file is daily or hourly
+  #if it has two columns it is daily 
+  #if it has three columns it is hourly
+  
+  #Define the variables names for hourly and daily
+  variablesnames_hourly <- c("Date", "Hour", "Value")
+  variablesnames_daily <- c("Date", "Value")
+  
+  # Check if the file has the correct number of columns and their names
+  if(ncol(fileoriginal)==2)
+  {
+    
+    if(all(colnames(fileoriginal) == variablesnames_daily)== FALSE){stop('There is a problem with name of columns :', originalfile)}
+    
+  }
+  
+  if(ncol(fileoriginal)==3)
+  {
+    
+    if(all(colnames(fileoriginal) == variablesnames_hourly)== FALSE){stop('There is a problem with name of columns :', originalfile)}
+    
+    fileoriginal$HourDecimal  <- lapply(fileoriginal$Hour, function (x) hour_to_number (x))
+    
+    #Control of the hour format: if am or pm are detected, 
+    #the code converts the hour to 24h format. The target format includes seconds.
+    
+    if(any(grepl("m",fileoriginal$Hour)))
+    {
+      fileoriginal$Hour <- format(strptime(fileoriginal$Hour,"%I:%M %p"),'%H:%M:%S')
+    }
+    
+    else
+    {
+      #To convert 24 hour format  
+      fileoriginal$Hour <- format(strptime(fileoriginal$Hour,"%H:%M"),'%H:%M:%S')
+      
+    }
+  }
+  
+  
+  fileoriginal$Date <- as.Date(as.character(fileoriginal$Date), format= date_format)
+  fileoriginal$Value <- as.double(as.character(fileoriginal$Value))
+  
+  
+  fileoriginal <- as.data.frame(fileoriginal)
+  return(fileoriginal)
+}
+
+
+
+#The convert_units function converts units of the original data set to standard units. 
+#-Arguments: weather data
+#-Return: weather data with standerized units
+#lapply(list.files(here("Original_Data")), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt, date_format = date_format )
+convert_units <- function(weatherdata, date_format="%Y%m%d", sepa)
+{
+  #Read file
+  data <- put_format(weatherdata,date_format, sepa)
+  
+  #Extract variable names and units
+  split_name <- split_name(weatherdata) 
+  
+  #SR 
+  if(split_name[3]=='MJM2')
+  {
+    data$Value <- data$Value/23.88
+  }
+  
+  #Temperatures: target units is celcius degrees
+  if(split_name[3]=='FD')
+  {
+    data$Value <- (data$Value-32)/1.8
+  }
+  
+  #If the units are kWHM2 (kilowatts per meter square) 
+  if(split_name[3]=='KWHM2')
+  {
+    data$Value <- (1000*data$Value)*0.0858
+  }
+  
+  #If the units are WHM2 (watts per meter square) 
+  if(split_name[3]=="WHM2")
+  {
+    data$Value <- (data$Value)*0.0858
+  }
+  return(data)
+  
+}
 
 
 
