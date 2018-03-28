@@ -112,7 +112,7 @@ write.csv(variables, paste0(here(),"/SpatialInformation_InputVariables/","Input_
 #Information Spatial information of stations. Longitude and Latitude.
 Spatial_Information()
 
-print("Update longitude and latitude in the file Information_Spatial_Stations in the foler SpatialInformation_InputVariables")
+print("Update longitude and latitude in the file Information_Spatial_Stations")
 
 
 
@@ -199,9 +199,8 @@ graph_all("PRECIPITATION", 'Precipitacion', station)
 
 #Moving and merge files
 #setwd("./Rmawgen/Files_By_Station")
-#Moving ALL files and Files_By_Station
+#Moving ALL files to Files_By_Station
 move_files_SR_HR()
-#match_files(list.files(), "../../Results/Results_DailyControl.csv", type=1)
 match_files(type="RandomForest")
 
 
@@ -222,23 +221,6 @@ read_files(list.files(pattern=".txt"))
 
 
 
-
-
-
-
-# 
-# #move files to Rmawgen folder
-# Rmawgen <- paste(getwd(), "Rmawgen", sep = "/")
-# move_files_txt(from = getwd(), to = Rmawgen, format = "\\.csv$")
-# 
-# 
-# setwd(Rmawgen)
-#     
-    
-    
-    
-    
-    
 
 
     
