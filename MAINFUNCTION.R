@@ -28,6 +28,7 @@ library(geosphere)
 library(ggdendro)
 library(dismo)
 library(rgeos)
+library(roxygen2)
 
 
 #Load functions
@@ -120,12 +121,9 @@ if(variables$Time_Type == 1)
 {
   
 #Change directory Original_Data
-setwd("./Original_Data")
-  
-
 #Hourly Control
 #final_results <- mclapply(list.files(), results, restricfile = Hourly_restric ,mc.cores=20)
-final_results <- lapply(list.files(), results, restricfile = Hourly_restric, typefile =2, sepa = separt)
+final_results <- lapply(list.files(here("Original_Data")), results, restricfile = Hourly_restric, typefile =2, sepa = separt)
 
 #Results of Hourly Control
 final_results <- do.call("rbind", final_results)
@@ -136,20 +134,17 @@ colnames(final_results) <- c("Station_Name", "Variable_Name", "OriginalData_Size
 write.csv(final_results, file = "../Results/Results_HourlyControl.csv")
 
 
-#Change Directory to After Hourly Data
-setwd("../AfterHourlyControl_Data")
-
 
 #Hourly to Daily
 #The percentage is for checking if a station has enough data per day.   
 #mclapply (list.files(pattern = "\\.txt$"), Hour_to_Day, percentage = 0.8,mc.cores=20)
-lapply (list.files(), Hour_to_Day, percentage = Percentage)
+lapply (list.files(here("AfterHourlyControl_Data")), Hour_to_Day, percentage = Percentage)
 
 #Results Daily Control
 results <- lapply(list.files(), info_station, percentage=Percentage)
 final_results <- do.call("rbind", results)
 colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data", "Total_Days", "Acceptable_Days","Percentage" )
-write.csv(final_results, file = paste0("../Results/","Results_DailyControl.csv") )
+write.csv(final_results, file = paste0(here("Results"), "/Results_DailyControl.csv") )
 
 }
 
@@ -210,10 +205,7 @@ graph_all_SR_RH(list.files(path = "./Randomforest/", pattern = "\\.txt$"), "Hume
 graph_all_SR_RH(list.files(path = "./Randomforest/", pattern = "\\.txt$"), "Radiacion_Solar")
 
 #Change final file to folder 
-#setwd("./Rmawgen/Files_By_Station")
-#match_files(list.files(), "../../Results/Results_DailyControl.csv", type=2)
 match_files(type="Final_Data")
-
 
 
 #Moving final data
@@ -226,10 +218,9 @@ read_files(list.files(pattern=".txt"))
     
     
     
-    
-    
-    
-    
+
+        
+
     
     
     
