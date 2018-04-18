@@ -249,14 +249,11 @@ SR_hourlytodaily <- function (data_perday, k=3)
 #               percentage. percentage for acceptable day
 #               time. If data is hourly so time = 1. If data is daily so time = 0
 
-#results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, typefile = 1, sepa= separt, time =2)
-
 info_station<- function(file, percentage, time, sepa )
 {
   station_name <- split_name(file)[1]
   variable <- split_name(file)[2]
   
-  #read_file <- convert_units(file, date_format="%Y-%m-%d", sepa )
   read_file <- read.table(paste0(here(), "/AfterDailyControl_Data/",file), header = T)
   read_file$Value <- as.double(read_file$Value)
   read_file$Date  <- as.Date(as.character(read_file$Date ), format = "%Y-%m-%d" )
@@ -290,12 +287,6 @@ info_station<- function(file, percentage, time, sepa )
   return(result)
 }
 
-
-
-#results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage=Percentage, typefile = 1, sepa= " ", time =2)
-#lapply(list.files(path= "./AfterDailyControl_Data"), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt, date_format = date_format )
-
-#lapply(list.files(), daily_control, daily_restric = Daily_restric, typefile = 1, sepa = separt, date_format = date_format )
 
 
 daily_control <- function (daily_restric, file, sepa, date_format )
@@ -2128,8 +2119,70 @@ applying_rmwagen_2 <- function (TEMPERATURE_MAX, TEMPERATURE_MIN, PRECIPITATION,
   
   
 }
+#ControlHourlyDaily works limits for variables.
+#Arguments:  type = 1 if is hourly
+#                 = 2 if is daily
 
-
+controlHourlyDaily <- function(type)
+{
+  if(type == 1)
+  {
+    
+    #Change directory Original_Data
+    #Hourly Control
+    #final_results <- mclapply(list.files(), results, restricfile = Hourly_restric ,mc.cores=20)
+    final_results <- lapply(list.files(here("Original_Data")), results, restricfile = Hourly_restric, typefile =2, sepa = separt)
+    
+    #Results of Hourly Control
+    final_results <- do.call("rbind", final_results)
+    final_results$Latitude <- NA
+    final_results$Longitude <- NA
+    final_results$Altitude <- NA
+    colnames(final_results) <- c("Station_Name", "Variable_Name", "OriginalData_Size", "CleanData_Size", "ErrorData_Size", "Latitude", "Longitude", "Altitude")
+    write.csv(final_results, file = "../Results/Results_HourlyControl.csv")
+    
+    
+    
+    #Hourly to Daily
+    #The percentage is for checking if a station has enough data per day.   
+    #mclapply (list.files(pattern = "\\.txt$"), Hour_to_Day, percentage = 0.8,mc.cores=20)
+    lapply (list.files(here("AfterHourlyControl_Data")), Hour_to_Day, percentage = Percentage)
+    
+    #Results Daily Control
+    results <- lapply(list.files(), info_station, percentage=Percentage)
+    final_results <- do.call("rbind", results)
+    colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data", "Total_Days", "Acceptable_Days","Percentage" )
+    write.csv(final_results, file = paste0(here("Results"), "/Results_DailyControl.csv") )
+    
+  }
+  
+  if(type == 2)
+  {
+    
+    #Daily Control NA
+    names_stations_NA <- Check_All_Station_NA(list.files(path = "./Original_Data"), variables$Approved_percentage)
+    names_stations_few_NA <- Check_All_Station_Few_NA (list.files(path = "./Original_Data"), 0.06)
+    lapply(list.files(here("Original_Data")), daily_control, daily_restric = Daily_restric, sepa = separt, date_format = date_format )
+    
+    results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage= variables$Approved_percentage, sepa = variables$separt, time =2)
+    final_results <- do.call("rbind", results)
+    colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data")
+    
+    #Station number
+    lat_Lon_El <- read.csv(paste0(here(),"/SpatialInformation_InputVariables/","Information_Spatial_Stations.csv"))
+    lat_Lon_El$Station_Name <- as.character(lat_Lon_El$Station_Name )
+    final_results$Station_Name <- as.character(final_results$Station_Name)
+    
+    total <-merge(lat_Lon_El,final_results, by = c("Station_Name"), all =TRUE)
+    write.csv( total, file = paste0(here(), "/Results/","Results_DailyControl.csv"), row.names = FALSE)
+    
+    
+  }
+  
+  
+  
+  
+}  
 
 
 
