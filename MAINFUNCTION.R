@@ -29,6 +29,9 @@ library(ggdendro)
 library(dismo)
 library(rgeos)
 library(roxygen2)
+library(tsoutliers)
+
+
 
 
 #Load functions
@@ -41,6 +44,7 @@ source("FORMATRANDOMFOREST.R")
 source("PLOTS.R")
 source("DATAFINAL.R")
 
+source("All_Functions.R")
 
 
 #The setwd() must be directory where are the source above.
@@ -117,59 +121,10 @@ print("Update longitude and latitude in the file Information_Spatial_Stations")
 
 
 
-if(variables$Time_Type == 1)
-{
-  
-#Change directory Original_Data
-#Hourly Control
-#final_results <- mclapply(list.files(), results, restricfile = Hourly_restric ,mc.cores=20)
-final_results <- lapply(list.files(here("Original_Data")), results, restricfile = Hourly_restric, typefile =2, sepa = separt)
-
-#Results of Hourly Control
-final_results <- do.call("rbind", final_results)
-final_results$Latitude <- NA
-final_results$Longitude <- NA
-final_results$Altitude <- NA
-colnames(final_results) <- c("Station_Name", "Variable_Name", "OriginalData_Size", "CleanData_Size", "ErrorData_Size", "Latitude", "Longitude", "Altitude")
-write.csv(final_results, file = "../Results/Results_HourlyControl.csv")
+#Control hourly or daily.
+controlHourlyDaily(type = variables$Time_Type)
 
 
-
-#Hourly to Daily
-#The percentage is for checking if a station has enough data per day.   
-#mclapply (list.files(pattern = "\\.txt$"), Hour_to_Day, percentage = 0.8,mc.cores=20)
-lapply (list.files(here("AfterHourlyControl_Data")), Hour_to_Day, percentage = Percentage)
-
-#Results Daily Control
-results <- lapply(list.files(), info_station, percentage=Percentage)
-final_results <- do.call("rbind", results)
-colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data", "Total_Days", "Acceptable_Days","Percentage" )
-write.csv(final_results, file = paste0(here("Results"), "/Results_DailyControl.csv") )
-
-}
-
-if(variables$Time_Type  == 2)
-{
-  
-  #Daily Control NA
-  names_stations_NA <- Check_All_Station_NA(list.files(path = "./Original_Data"), variables$Approved_percentage)
-  names_stations_few_NA <- Check_All_Station_Few_NA (list.files(path = "./Original_Data"), 0.06)
-  lapply(list.files(here("Original_Data")), daily_control, daily_restric = Daily_restric, sepa = separt, date_format = date_format )
-  
-  results <- lapply(list.files(path= "./AfterDailyControl_Data"), info_station, percentage= variables$Approved_percentage, sepa = variables$separt, time =2)
-  final_results <- do.call("rbind", results)
-  colnames(final_results) <- c("Station_Name", "Variable_Name", "Star_Data", "End_Data")
-  
-  #Station number
-  lat_Lon_El <- read.csv(paste0(here(),"/SpatialInformation_InputVariables/","Information_Spatial_Stations.csv"))
-  lat_Lon_El$Station_Name <- as.character(lat_Lon_El$Station_Name )
-  final_results$Station_Name <- as.character(final_results$Station_Name)
-    
-  total <-merge(lat_Lon_El,final_results, by = c("Station_Name"), all =TRUE)
-  write.csv( total, file = paste0(here(), "/Results/","Results_DailyControl.csv"), row.names = FALSE)
-  
-  
-}
 
 #Stations for Rmwagen
 choose_stations() 
@@ -183,8 +138,7 @@ put_rmawgenformat(list.files(here("AfterDailyControl_Data")), 'P')
 
 
 
-#Using Rmwagen Num_Staion is a variable that work for enumerate stations 
-
+#Using Rmwagen 
 
 station <- c("13030010", "13037040")
 graph_all("TEMPERATURE_MAX", 'Temperatura_Maxima', station)
